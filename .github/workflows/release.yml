@@ -51,6 +51,11 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Setup pub credentials
+        run: |
+          mkdir -p $HOME/.config/dart
+          echo '${{ secrets.PUB_CREDENTIALS }}' > $HOME/.config/dart/pub-credentials.json
+
       - name: Install dependencies
         run: flutter pub get
 
