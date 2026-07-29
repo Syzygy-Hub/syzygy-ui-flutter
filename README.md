@@ -1,6 +1,6 @@
-# flutter_ui_library
+# aks5686_flutter_ui_library
 
-[![pub.dev](https://img.shields.io/pub/v/flutter_ui_library)](https://pub.dev/packages/flutter_ui_library)
+[![pub.dev](https://img.shields.io/pub/v/aks5686_flutter_ui_library)](https://pub.dev/packages/aks5686_flutter_ui_library)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web-lightgrey)](https://flutter.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -17,7 +17,7 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  flutter_ui_library:
+  aks5686_flutter_ui_library:
     git:
       url: https://github.com/aks5686/flutter-ui-library.git
       ref: main
@@ -26,7 +26,7 @@ dependencies:
 ## Usage
 
 ```dart
-import 'package:flutter_ui_library/flutter_ui_library.dart';
+import 'package:aks5686_flutter_ui_library/aks5686_flutter_ui_library.dart';
 
 // Button
 PrimaryButton(

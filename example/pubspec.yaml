@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_ui_library:
+  aks5686_flutter_ui_library:
     path: ../
 
 dev_dependencies:

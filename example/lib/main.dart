@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Badge;
-import 'package:flutter_ui_library/flutter_ui_library.dart';
+import 'package:aks5686_flutter_ui_library/aks5686_flutter_ui_library.dart';
 
 void main() {
   runApp(const ExampleApp());
@@ -11,7 +11,7 @@ class ExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'flutter_ui_library example',
+      title: 'aks5686_flutter_ui_library example',
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       home: const ComponentGalleryPage(),
@@ -27,7 +27,7 @@ class ComponentGalleryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: AppBackButton(onPressed: () {}),
-        title: const Text('flutter_ui_library'),
+        title: const Text('aks5686_flutter_ui_library'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),

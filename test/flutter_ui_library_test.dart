@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_ui_library/flutter_ui_library.dart';
+import 'package:aks5686_flutter_ui_library/aks5686_flutter_ui_library.dart';
 
 Widget _wrap(Widget child, {ThemeData? theme}) {
   return MaterialApp(
