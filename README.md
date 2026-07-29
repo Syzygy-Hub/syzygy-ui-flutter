@@ -17,10 +17,12 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  aks5686_flutter_ui_library:
-    git:
-      url: https://github.com/aks5686/flutter-ui-library.git
-      ref: main
+  aks5686_flutter_ui_library: ^1.0.1
+```
+
+Then run:
+```sh
+flutter pub get
 ```
 
 ## Usage
@@ -38,6 +40,13 @@ PrimaryButton(
 TextInput(
   label: 'Email',
   controller: emailController,
+)
+
+// Input with character counter
+TextInput(
+  label: 'Bio',
+  controller: bioController,
+  maxLength: 100, // shows a right-aligned "23/100" counter below the field
 )
 
 // Badge

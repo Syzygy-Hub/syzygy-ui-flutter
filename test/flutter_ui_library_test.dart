@@ -116,6 +116,21 @@ void main() {
       expect(find.text('you@example.com'), findsOneWidget);
     });
 
+    testWidgets('TextInput with maxLength shows character counter',
+        (tester) async {
+      final controller = TextEditingController(text: 'Hello');
+      await tester.pumpWidget(_wrap(
+        TextInput(label: 'Bio', controller: controller, maxLength: 100),
+      ));
+
+      expect(find.text('5/100'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'Hello world');
+      await tester.pump();
+
+      expect(find.text('11/100'), findsOneWidget);
+    });
+
     testWidgets('SecureInput toggles obscure text', (tester) async {
       await tester.pumpWidget(_wrap(
         const SecureInput(label: 'Password'),

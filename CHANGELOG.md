@@ -1,3 +1,9 @@
+## 1.0.1 (2026-07-30)
+- TextInput: added maxLength parameter with character counter
+- Renamed package to aks5686_flutter_ui_library
+- Updated installation to use pub.dev
+- Improved release workflow with automatic pub.dev publishing
+
 ## 1.0.0
 
 - Initial release

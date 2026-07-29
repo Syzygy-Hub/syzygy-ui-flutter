@@ -42,6 +42,12 @@ class ComponentGalleryPage extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           const TextInput(label: 'Email', hintText: 'you@example.com'),
           const SizedBox(height: AppSpacing.md),
+          const TextInput(
+            label: 'Bio',
+            hintText: 'Tell us about yourself',
+            maxLength: 100,
+          ),
+          const SizedBox(height: AppSpacing.md),
           const SecureInput(label: 'Password'),
           const SizedBox(height: AppSpacing.md),
           const CardView(child: Text('A simple card')),

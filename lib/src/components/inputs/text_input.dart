@@ -59,6 +59,24 @@ class TextInput extends StatelessWidget {
               maxLength: maxLength,
               onChanged: onChanged,
               style: Theme.of(context).textTheme.bodyMedium,
+              buildCounter: maxLength == null
+                  ? null
+                  : (
+                      context, {
+                      required currentLength,
+                      required isFocused,
+                      required maxLength,
+                    }) {
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '$currentLength/$maxLength',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: colors.secondary,
+                              ),
+                        ),
+                      );
+                    },
               decoration: decoration ??
                   InputDecoration(
                     hintText: hintText,

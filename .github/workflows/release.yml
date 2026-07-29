@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,14 +31,38 @@ jobs:
 
       - name: Sync pubspec.yaml version
         run: |
-          sed -i -E "s/^version:.*/version: ${VERSION}/" pubspec.yaml
+          COMMIT_VERSION="${{ env.VERSION }}"
+          COMMIT_VERSION="${COMMIT_VERSION#v}"
+          PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          if [ "$PKG_VERSION" != "$COMMIT_VERSION" ]; then
+            echo "Updating pubspec.yaml version from $PKG_VERSION to $COMMIT_VERSION"
+            sed -i "s/^version: .*/version: $COMMIT_VERSION/" pubspec.yaml
+          else
+            echo "Versions match: $PKG_VERSION"
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add pubspec.yaml
           git commit -m "chore: sync pubspec.yaml to v${VERSION} [skip ci]" || echo "No changes to commit"
           git push origin HEAD:${{ github.event.workflow_run.head_branch }} || echo "Nothing to push"
 
-      - name: Delete existing tag if present
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Publish to pub.dev
+        run: flutter pub publish --force
+
+      - name: Verify publish
+        run: |
+          PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "✅ Published aks5686_flutter_ui_library@$PKG_VERSION to pub.dev"
+
+      - name: Delete existing tag if exists
         run: git push origin :refs/tags/${{ env.VERSION }} || true
 
       - name: Create GitHub Release
@@ -51,6 +76,5 @@ jobs:
 
       - name: Summary
         run: |
-          echo "### Release v${VERSION} published :rocket:" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Commit: ${{ github.event.workflow_run.head_commit.message }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Published aks5686_flutter_ui_library@${{ env.VERSION }} to pub.dev"
+          echo "✅ GitHub Release ${{ env.VERSION }} created"

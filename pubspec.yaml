@@ -1,6 +1,6 @@
 name: aks5686_flutter_ui_library
 description: "Production-ready Flutter component library with design tokens, Dark Mode, and zero third-party dependencies"
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/aks5686/flutter-ui-library
 
 environment:
