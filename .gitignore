@@ -6,6 +6,10 @@
 *.swp
 .buildlog/
 .history
+.DS_Store
+*.iml
+.idea/
+pubspec.lock
 
 
 

@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ["Flutter CI"]
+    types:
+      - completed
+
+jobs:
+  release:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      startsWith(github.event.workflow_run.head_commit.message, 'release:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Extract version from commit message
+        id: version
+        run: |
+          MESSAGE="${{ github.event.workflow_run.head_commit.message }}"
+          RAW_VERSION=$(echo "$MESSAGE" | head -n1 | sed -E 's/^release:\s*v?([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          echo "VERSION=$RAW_VERSION" >> "$GITHUB_ENV"
+          echo "version=$RAW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Sync pubspec.yaml version
+        run: |
+          sed -i -E "s/^version:.*/version: ${VERSION}/" pubspec.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore: sync pubspec.yaml to v${VERSION} [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.event.workflow_run.head_branch }} || echo "Nothing to push"
+
+      - name: Delete existing tag if present
+        run: git push origin :refs/tags/${{ env.VERSION }} || true
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${VERSION}" \
+            --title "v${VERSION}" \
+            --notes "${{ github.event.workflow_run.head_commit.message }}" \
+            --target ${{ github.event.workflow_run.head_branch }}
+
+      - name: Summary
+        run: |
+          echo "### Release v${VERSION} published :rocket:" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Commit: ${{ github.event.workflow_run.head_commit.message }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_STEP_SUMMARY"
