@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart' hide Badge;
-import 'package:aks5686_flutter_ui_library/aks5686_flutter_ui_library.dart';
+import 'package:flutter/material.dart' hide Badge, TabBar, BottomNavigationBar, BottomSheet, Chip;
+import 'package:syzygy_ui_flutter/syzygy_ui_flutter.dart';
 
 void main() {
   runApp(const ExampleApp());
@@ -11,7 +11,7 @@ class ExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'aks5686_flutter_ui_library example',
+      title: 'syzygy_ui_flutter example',
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       home: const ComponentGalleryPage(),
@@ -25,9 +25,9 @@ class ComponentGalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: SyzygyAppBar(
         leading: AppBackButton(onPressed: () {}),
-        title: const Text('aks5686_flutter_ui_library'),
+        title: 'syzygy_ui_flutter',
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),

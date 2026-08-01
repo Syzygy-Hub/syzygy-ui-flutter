@@ -62,10 +62,20 @@ jobs:
       - name: Publish to pub.dev
         run: flutter pub publish --force
 
-      - name: Verify publish
+      - name: Verify pub.dev publish
         run: |
           PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          echo "✅ Published aks5686_flutter_ui_library@$PKG_VERSION to pub.dev"
+          for i in $(seq 1 10); do
+            LATEST=$(curl -fsSL https://pub.dev/api/packages/syzygy_ui_flutter | jq -r '.latest.version' 2>/dev/null || echo "")
+            if [ "$LATEST" = "$PKG_VERSION" ]; then
+              echo "✅ pub.dev shows syzygy_ui_flutter@$PKG_VERSION"
+              exit 0
+            fi
+            echo "Attempt $i/10: pub.dev shows '$LATEST', expected '$PKG_VERSION' — waiting 10s for propagation..."
+            sleep 10
+          done
+          echo "::error::Publish verification failed — pub.dev never reported syzygy_ui_flutter@$PKG_VERSION"
+          exit 1
 
       - name: Delete existing tag if exists
         run: git push origin :refs/tags/${{ env.VERSION }} || true
@@ -81,5 +91,5 @@ jobs:
 
       - name: Summary
         run: |
-          echo "✅ Published aks5686_flutter_ui_library@${{ env.VERSION }} to pub.dev"
+          echo "✅ Published syzygy_ui_flutter@${{ env.VERSION }} to pub.dev"
           echo "✅ GitHub Release ${{ env.VERSION }} created"

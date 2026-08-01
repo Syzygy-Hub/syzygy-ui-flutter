@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  aks5686_flutter_ui_library:
+  syzygy_ui_flutter:
     path: ../
 
 dev_dependencies:
