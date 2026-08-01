@@ -36,7 +36,7 @@ class Dropdown<T> extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 48),
           child: DropdownButtonFormField<T>(
-            value: value,
+            initialValue: value,
             items: options
                 .map((option) => DropdownMenuItem<T>(
                       value: option,

@@ -4,10 +4,14 @@ version: 2.0.0
 homepage: https://github.com/Syzygy-Hub/syzygy-ui-flutter
 
 environment:
-  # Color.withValues() (used in ShimmerView) was introduced in Flutter 3.27 / Dart 3.6,
-  # alongside the deprecation of Color.withOpacity() — this is the true minimum, not 3.10.
-  sdk: '>=3.6.0 <4.0.0'
-  flutter: '>=3.27.0'
+  # RadioGroup (used in RadioButtonInput, replacing deprecated Radio.groupValue/
+  # Radio.onChanged) was introduced in Flutter 3.35.0 / Dart 3.9.0 — the latest-
+  # introduced of the APIs this library depends on, so it's the binding floor:
+  # DropdownButtonFormField.initialValue needs 3.33.0+ and Switch.activeThumbColor
+  # needs 3.32.0+, both older than the RadioGroup requirement.
+  # (Color.withValues(), used in ShimmerView, only needed 3.27.0 / Dart 3.6.0.)
+  sdk: '>=3.9.0 <4.0.0'
+  flutter: '>=3.35.0'
 
 dependencies:
   flutter:

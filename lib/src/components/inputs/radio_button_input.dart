@@ -5,6 +5,17 @@ import '../../tokens/colors.dart';
 /// A single labeled radio option. Compose several with shared parent state
 /// to build a radio group. Named `RadioButtonInput` for cross-platform
 /// naming consistency across the Syzygy ecosystem.
+///
+/// Each instance still takes its own [groupValue]/[onChanged] — the same
+/// consumer-driven "compose several, all pointed at the same group state"
+/// pattern this widget always used — rather than requiring consumers to
+/// restructure their code around a single shared [RadioGroup] ancestor
+/// wrapping every option. Internally, [RadioGroup] is still used (required
+/// by the current [Radio] API, since `Radio.groupValue`/`Radio.onChanged`
+/// are deprecated), just scoped to wrap only this single [Radio] with this
+/// instance's own group state — functionally equivalent to the old
+/// per-instance `groupValue`/`onChanged` params, since the old API never
+/// relied on implicit ancestor sharing between `Radio` instances either.
 class RadioButtonInput<T> extends StatelessWidget {
   const RadioButtonInput({
     super.key,
@@ -32,11 +43,13 @@ class RadioButtonInput<T> extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Radio<T>(
-              value: value,
+            RadioGroup<T>(
               groupValue: groupValue,
               onChanged: (v) => onChanged(v as T),
-              activeColor: colors.primary,
+              child: Radio<T>(
+                value: value,
+                activeColor: colors.primary,
+              ),
             ),
             Text(label, style: Theme.of(context).textTheme.bodyMedium),
           ],

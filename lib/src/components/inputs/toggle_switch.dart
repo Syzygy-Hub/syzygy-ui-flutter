@@ -26,7 +26,7 @@ class ToggleSwitch extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(label, style: Theme.of(context).textTheme.bodyMedium),
-          Switch(value: value, onChanged: onChanged, activeColor: colors.primary),
+          Switch(value: value, onChanged: onChanged, activeThumbColor: colors.primary),
         ],
       ),
     );

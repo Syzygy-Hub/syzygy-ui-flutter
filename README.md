@@ -1,6 +1,6 @@
 # syzygy_ui_flutter
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.27+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![pub.dev](https://img.shields.io/pub/v/syzygy_ui_flutter)](https://pub.dev/packages/syzygy_ui_flutter)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web-lightgrey)](https://flutter.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -14,8 +14,8 @@
 Production-ready Flutter component library with design tokens, Dark Mode, and zero third-party dependencies.
 
 ## Requirements
-- Flutter 3.27+
-- Dart 3.6+
+- Flutter 3.35+
+- Dart 3.9+
 
 ## Installation
 
