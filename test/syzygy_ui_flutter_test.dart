@@ -623,10 +623,10 @@ void main() {
 
     testWidgets('AppFormField renders label, child, and error', (tester) async {
       await tester.pumpWidget(_wrap(
-        AppFormField(
+        const AppFormField(
           label: 'Email',
           error: 'Required',
-          child: const TextField(),
+          child: TextField(),
         ),
       ));
       expect(find.text('Email'), findsOneWidget);
@@ -734,9 +734,9 @@ void main() {
 
     testWidgets('Popover shows content on tap', (tester) async {
       await tester.pumpWidget(_wrap(
-        Popover(
-          content: const Text('Popover content'),
-          child: const Text('Trigger'),
+        const Popover(
+          content: Text('Popover content'),
+          child: Text('Trigger'),
         ),
       ));
       await tester.tap(find.text('Trigger'));
@@ -754,9 +754,9 @@ void main() {
     testWidgets('SideMenu renders inside a Scaffold drawer', (tester) async {
       await tester.pumpWidget(MaterialApp(
         theme: AppTheme.light(),
-        home: Scaffold(
-          drawer: const SideMenu(child: Text('Menu content')),
-          body: const SizedBox(),
+        home: const Scaffold(
+          drawer: SideMenu(child: Text('Menu content')),
+          body: SizedBox(),
         ),
       ));
       final scaffoldState = tester.state<ScaffoldState>(find.byType(Scaffold));

@@ -26,7 +26,7 @@ jobs:
         run: curl -fsSL https://raw.githubusercontent.com/Syzygy-Hub/syzygy-lint-config/v1.0.0/analysis_options.yaml -o analysis_options.yaml
 
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --fatal-warnings
 
       - name: Run tests
         run: flutter test

@@ -1,4 +1,47 @@
+# Mirrors the shared config CI fetches from syzygy-lint-config
+# (https://github.com/Syzygy-Hub/syzygy-lint-config, pinned to v1.0.0), so
+# `flutter analyze` behaves identically whether run locally or in CI.
+# Previously this file only included flutter_lints' bare defaults, so a
+# clean local `flutter analyze` could still surface new findings once CI
+# fetched and swapped in the fuller shared ruleset below.
 include: package:flutter_lints/flutter.yaml
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+linter:
+  rules:
+    # Const constructors let Flutter skip rebuilding a subtree entirely —
+    # meaningfully cheaper than the equivalent non-const widget tree.
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_literals_to_create_immutables: true
+
+    # print() output doesn't get filtered/leveled and is easy to forget in
+    # a PR; prefer a real logger for anything that should ship.
+    avoid_print: true
+
+    # Purely stylistic, but keeps string literals consistent across the
+    # whole Syzygy Dart codebase (matches the single-quote convention used
+    # in the shared ESLint/Prettier config for the RN side).
+    prefer_single_quotes: true
+
+    # Extra rules beyond flutter_lints' defaults that catch common mistakes
+    # without being noisy:
+    always_declare_return_types: true
+    avoid_unnecessary_containers: true # a Container with no styling is just wasted nesting
+    sized_box_for_whitespace: true # SizedBox is cheaper than Container for pure spacing
+    unnecessary_this: true
+
+# Promote the const-related rules from their default "info" severity to
+# "warning", so `flutter analyze --fatal-warnings` (used in CI) actually
+# enforces them instead of only ever surfacing as non-blocking hints. The
+# remaining rules above stay at their default info severity — stylistic or
+# hygiene nits that shouldn't fail a build over a single missed instance.
+errors:
+  prefer_const_constructors: warning
+  prefer_const_constructors_in_immutables: warning
+  prefer_const_literals_to_create_immutables: warning
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - build/**
