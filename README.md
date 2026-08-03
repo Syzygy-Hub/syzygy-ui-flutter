@@ -22,7 +22,7 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  syzygy_ui_flutter: ^2.1.0
+  syzygy_ui_flutter: ^2.2.0
 ```
 
 Then run:
@@ -32,19 +32,19 @@ flutter pub get
 
 ## Components
 
-68 components across 9 categories (counted individually below, excluding token/transition utility classes).
+79 components across 9 categories (counted individually below, excluding token/transition utility classes).
 
 Several components are named to avoid colliding with Flutter Material's own widgets of the same name — either by using a distinct name (e.g. `SliderInput` instead of `Slider`, `SyzygyAppBar` instead of `AppBar`), or by hiding Material's version in favor of this library's (e.g. `import 'package:flutter/material.dart' hide TabBar;`), the same way this library's own `Badge` already hides Material's `Badge`. Any collision-hiding or collision-avoiding component is noted below.
 
 - **Buttons:** PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, AppIconButton, LoadingButton, AppFloatingActionButton *(distinct name — avoids colliding with Material's `FloatingActionButton`)*, ButtonGroup
-- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper, TextArea, OTPInput, TagInput, DatePickerField, TimePickerField, AppFormField *(distinct name — avoids colliding with Flutter's own `FormField<T>` base class)*, PasswordStrengthIndicator
-- **Display:** Avatar, DividerLine, Chip *(hides Material's `Chip`)*, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, AvatarGroup, StatsCard *(aka MetricCard)*, RatingInput
-- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView, SkeletonView, CircularProgress, InlineAlert *(aka Banner — distinct name avoids colliding with both Material's `Banner` and `MaterialBanner`)*, AppSnackbar *(builder around Material's own `SnackBar`, not a widget — distinct name avoids colliding with Material's `SnackBar`)*
+- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper, TextArea, OTPInput, TagInput, DatePickerField, TimePickerField, AppFormField *(distinct name — avoids colliding with Flutter's own `FormField<T>` base class)*, PasswordStrengthIndicator, SearchableDropdown *(standalone anchored-overlay widget — not a `Dropdown` wrapper, since `DropdownButtonFormField` has no hook for inline search/filtering)*, PhoneInput (tappable flag + dial-code prefix, minimal 15-country default list, overridable), CurrencyInput (hand-rolled locale-style grouping, no `intl` dependency)
+- **Display:** Avatar, DividerLine, Chip *(hides Material's `Chip`)*, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, AvatarGroup, StatsCard *(aka MetricCard)*, RatingInput, PageControl *(aka DotIndicator; read-only, syncs with `PagerView`)*, Accordion (managed group of `CollapsibleView`-style sections; single-open-by-default via `allowMultipleOpen`), Timeline *(aka ActivityFeed)*, ColorSwatchView *(distinct name — avoids colliding with Flutter Material's own `ColorSwatch<T>` class)*
+- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView, SkeletonView, CircularProgress, InlineAlert *(aka Banner — distinct name avoids colliding with both Material's `Banner` and `MaterialBanner`)*, AppSnackbar *(builder around Material's own `SnackBar`, not a widget — distinct name avoids colliding with Material's `SnackBar`)*, NetworkStatusBanner (consumer-driven `isOffline` prop — Flutter has no built-in connectivity API, so this doesn't self-detect), ConfirmDialog (preset `ModalDialog` variant with confirm/cancel + `isDestructive` styling)
 - **Overlay:** ModalDialog, BottomSheet *(hides Material's `BottomSheet`)*, CollapsibleView, ActionSheet, Popover, AppTooltip *(distinct name — avoids colliding with Material's `Tooltip`)*
 - **Navigation:** AppBackButton, TabBar *(hides Material's `TabBar`)*, BottomNavigationBar *(hides Material's `BottomNavigationBar`)*, SyzygyAppBar *(distinct name — no hide needed; implements `PreferredSizeWidget` so it still works in `Scaffold(appBar: ...)`)*, SideMenu *(aka Drawer — wraps Material's own `Drawer` for `Scaffold(drawer: ...)` integration)*, FloatingTabBar (floating pill bar, icon + label — distinct from the icon-only `BottomNavigationBar`), StepIndicator *(aka WizardSteps)*, Breadcrumbs
 - **Cards:** CardView
 - **Badges:** Badge *(hides Material's `Badge`)*
-- **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*, AdaptiveStack, FlowLayout, StickyHeader
+- **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*, AdaptiveStack, FlowLayout, StickyHeader, SafeAreaWrapper (themed wrapper around Flutter's own native `SafeArea`), LabeledDivider (wraps `DividerLine` with a centered/leading/trailing label)
 - **Transitions:** `NavigationTransitions.slideTransition`, `.crossFadeTransition`, `.slideVerticalTransition`, `.modalPresentationTransition`, `.scaleTransition`, `.fadeThroughTransition` — `PageRouteBuilder` factories
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.

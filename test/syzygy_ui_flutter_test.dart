@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge, TabBar, BottomNavigationBar, BottomSheet, Chip;
+import 'package:flutter/material.dart' hide Badge, TabBar, BottomNavigationBar, BottomSheet, Chip, ColorSwatch;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:syzygy_ui_flutter/syzygy_ui_flutter.dart';
@@ -830,6 +830,174 @@ void main() {
       ));
       expect(find.text('Header'), findsOneWidget);
       expect(find.text('Body content'), findsOneWidget);
+    });
+
+    testWidgets('PageControl renders dots for each page', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const PageControl(pageCount: 3, currentPage: 1),
+      ));
+      expect(find.byType(AnimatedContainer), findsNWidgets(3));
+    });
+
+    testWidgets('Accordion expands a section on tap and collapses others by default',
+        (tester) async {
+      await tester.pumpWidget(_wrap(
+        const Accordion(
+          sections: [
+            AccordionSection(title: 'Section A', child: Text('Content A')),
+            AccordionSection(title: 'Section B', child: Text('Content B')),
+          ],
+        ),
+      ));
+
+      Finder byLabel(String label) => find.byWidgetPredicate(
+            (widget) => widget is Semantics && widget.properties.label == label,
+          );
+
+      expect(byLabel('Section A, collapsed'), findsOneWidget);
+      await tester.tap(find.text('Section A'));
+      await tester.pumpAndSettle();
+      expect(byLabel('Section A, expanded'), findsOneWidget);
+
+      await tester.tap(find.text('Section B'));
+      await tester.pumpAndSettle();
+      expect(byLabel('Section A, collapsed'), findsOneWidget);
+      expect(byLabel('Section B, expanded'), findsOneWidget);
+    });
+
+    testWidgets('Timeline renders item titles and subtitles', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const Timeline(
+          items: [
+            TimelineItemData(title: 'Order placed', subtitle: 'Processing', timestamp: '9:00 AM'),
+            TimelineItemData(title: 'Order shipped'),
+          ],
+        ),
+      ));
+      expect(find.text('Order placed'), findsOneWidget);
+      expect(find.text('Processing'), findsOneWidget);
+      expect(find.text('Order shipped'), findsOneWidget);
+    });
+
+    testWidgets('ColorSwatchView renders label and reflects selection', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const ColorSwatchView(color: Colors.blue, label: 'Blue', isSelected: true),
+      ));
+      expect(find.text('Blue'), findsOneWidget);
+      expect(find.byType(ColorSwatchView), findsOneWidget);
+    });
+
+    testWidgets('SearchableDropdown filters options via search field', (tester) async {
+      String? selected;
+      await tester.pumpWidget(_wrap(
+        SearchableDropdown<String>(
+          label: 'Country',
+          value: null,
+          options: const ['USA', 'Canada', 'Cuba'],
+          onChanged: (v) => selected = v,
+          optionTitle: (o) => o,
+        ),
+      ));
+
+      await tester.tap(find.text('Search...').first);
+      await tester.pump();
+      expect(find.text('USA'), findsOneWidget);
+      expect(find.text('Canada'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'Cu');
+      await tester.pump();
+      expect(find.text('Cuba'), findsOneWidget);
+      expect(find.text('USA'), findsNothing);
+
+      // Select an option so the overlay (and its focused TextField) is
+      // properly torn down before the test ends, rather than leaking a
+      // dangling OverlayEntry into subsequent tests.
+      await tester.tap(find.text('Cuba'));
+      await tester.pumpAndSettle();
+      expect(selected, 'Cuba');
+    });
+
+    testWidgets('PhoneInput renders default country prefix and accepts input', (tester) async {
+      PhoneNumberValue? reported;
+      await tester.pumpWidget(_wrap(
+        PhoneInput(onChanged: (v) => reported = v),
+      ));
+      expect(find.textContaining('+1'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '5551234567');
+      await tester.pump();
+      expect(reported?.raw, '5551234567');
+    });
+
+    testWidgets('CurrencyInput renders currency symbol prefix and reports parsed value',
+        (tester) async {
+      double? reported;
+      await tester.pumpWidget(_wrap(
+        CurrencyInput(label: 'Amount', onChanged: (v) => reported = v),
+      ));
+      expect(find.text('\$'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '1234.5');
+      await tester.pump();
+      expect(reported, 1234.5);
+    });
+
+    test('CurrencyInput.groupThousands inserts thousands separators', () {
+      expect(CurrencyInput.groupThousands('1234567.89'), '1,234,567.89');
+      expect(CurrencyInput.groupThousands('42'), '42');
+    });
+
+    testWidgets('NetworkStatusBanner shows message when offline and hides when online',
+        (tester) async {
+      await tester.pumpWidget(_wrap(const NetworkStatusBanner(isOffline: true)));
+      expect(find.text('No internet connection'), findsOneWidget);
+
+      await tester.pumpWidget(_wrap(const NetworkStatusBanner(isOffline: false)));
+      await tester.pumpAndSettle();
+      expect(find.text('No internet connection'), findsNothing);
+    });
+
+    testWidgets('ConfirmDialog.show resolves true on confirm', (tester) async {
+      bool? result;
+      await tester.pumpWidget(_wrap(
+        Builder(builder: (context) {
+          return ElevatedButton(
+            onPressed: () async {
+              result = await ConfirmDialog.show(
+                context,
+                title: 'Delete item?',
+                message: 'This cannot be undone.',
+                isDestructive: true,
+              );
+            },
+            child: const Text('Open confirm'),
+          );
+        }),
+      ));
+
+      await tester.tap(find.text('Open confirm'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete item?'), findsOneWidget);
+
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+      expect(result, isTrue);
+    });
+
+    testWidgets('SafeAreaWrapper renders child content', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const SafeAreaWrapper(child: Text('Wrapped content')),
+      ));
+      expect(find.text('Wrapped content'), findsOneWidget);
+      expect(find.byType(SafeArea), findsOneWidget);
+    });
+
+    testWidgets('LabeledDivider renders label between two line segments', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const LabeledDivider(label: 'or'),
+      ));
+      expect(find.text('or'), findsOneWidget);
+      expect(find.byType(DividerLine), findsNWidgets(2));
     });
   });
 }

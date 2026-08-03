@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-08-04
+
+### Added
+
+- **Display**: `PageControl` (aka `DotIndicator`; read-only row of dots synced with `PagerView`'s current page — no tap-to-navigate, since a page indicator reflects state rather than driving it), `Accordion` (managed group of `CollapsibleView`-style sections sharing open/closed coordination state; single-open-at-a-time by default via `allowMultipleOpen`), `Timeline` (aka `ActivityFeed`; vertical event list with a dot/icon connector line via simple fixed-height segments, not a `CustomPainter`), `ColorSwatchView` (circle/square swatch with optional label and `isSelected` border using the `focus` color token — named `ColorSwatchView`, not `ColorSwatch`, since Flutter Material already exports a framework class named `ColorSwatch<T>`).
+- **Inputs**: `SearchableDropdown` (standalone `TextField` + filtered option list via an anchored `OverlayEntry`, following `Popover`'s existing `CompositedTransformTarget`/`CompositedTransformFollower` pattern — not a wrapper around this library's `Dropdown`, since `DropdownButtonFormField` has no hook for inline search/filtering), `PhoneInput` (tappable flag-emoji + dial-code prefix selector, numeric keyboard, reports both a digits-only `raw` value and a `formatted` display string; ships with a minimal, real, overridable 15-country default list), `CurrencyInput` (currency symbol prefix/suffix with hand-rolled thousands-separator grouping from Dart core — no new `intl` dependency).
+- **Feedback**: `NetworkStatusBanner` ("No internet connection" banner — a controlled/presentational widget taking a required `isOffline` prop, since Flutter's core SDK has no built-in connectivity-detection API the way iOS's `NWPathMonitor`/Android's `ConnectivityManager` do natively), `ConfirmDialog` (preset `ModalDialog` variant: title/message/confirm/cancel, with `isDestructive` styling on the confirm button).
+- **Layout**: `SafeAreaWrapper` (themed wrapper around Flutter's own native `SafeArea` — exposes a consistent `syzygy_ui_flutter`-named API surface over an already-solved problem, unlike this release's genuinely dependency-constrained components), `LabeledDivider` (centered/leading/trailing text label breaking a line, built from two `DividerLine` segments).
+
+Nothing to report for `### Fixed` this release — no CI/lint carry-over was assigned to this repo.
+
 ## [2.1.0] - 2026-08-03
 
 ### Added

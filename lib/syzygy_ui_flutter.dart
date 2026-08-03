@@ -41,6 +41,9 @@ export 'src/components/inputs/date_picker_field.dart';
 export 'src/components/inputs/time_picker_field.dart';
 export 'src/components/inputs/app_form_field.dart';
 export 'src/components/inputs/password_strength_indicator.dart';
+export 'src/components/inputs/searchable_dropdown.dart';
+export 'src/components/inputs/phone_input.dart';
+export 'src/components/inputs/currency_input.dart';
 
 // Display
 export 'src/components/display/avatar.dart';
@@ -54,6 +57,10 @@ export 'src/components/display/count_badge.dart';
 export 'src/components/display/avatar_group.dart';
 export 'src/components/display/stats_card.dart';
 export 'src/components/display/rating_input.dart';
+export 'src/components/display/page_control.dart';
+export 'src/components/display/accordion.dart';
+export 'src/components/display/timeline.dart';
+export 'src/components/display/color_swatch_view.dart';
 
 // Feedback
 export 'src/components/feedback/loading_view.dart';
@@ -67,6 +74,8 @@ export 'src/components/feedback/skeleton_view.dart';
 export 'src/components/feedback/circular_progress.dart';
 export 'src/components/feedback/inline_alert.dart';
 export 'src/components/feedback/app_snackbar.dart';
+export 'src/components/feedback/network_status_banner.dart';
+export 'src/components/feedback/confirm_dialog.dart';
 
 // Cards
 export 'src/components/cards/card_view.dart';
@@ -99,6 +108,8 @@ export 'src/components/layout/keyboard_avoiding_scroll_view.dart';
 export 'src/components/layout/adaptive_stack.dart';
 export 'src/components/layout/flow_layout.dart';
 export 'src/components/layout/sticky_header.dart';
+export 'src/components/layout/safe_area_wrapper.dart';
+export 'src/components/layout/labeled_divider.dart';
 
 // Transitions
 export 'src/transitions/navigation_transitions.dart';
