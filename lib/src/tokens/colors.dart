@@ -23,6 +23,17 @@ class AppColorsLight {
   static const Color border = Color(0xFFE2E8F0);
   static const Color disabled = Color(0xFFCBD5E1);
   static const Color onDisabled = Color(0xFF94A3B8);
+  static const Color primaryMuted = Color(0xFFDBEAFE);
+  static const Color destructiveMuted = Color(0xFFFEE2E2);
+  static const Color successMuted = Color(0xFFDCFCE7);
+  static const Color warningMuted = Color(0xFFFEF3C7);
+  static const Color surfaceSecondary = Color(0xFFF1F5F9);
+  static const Color surfaceTertiary = Color(0xFFE2E8F0);
+  static const Color textTertiary = Color(0xFF94A3B8);
+  static const Color overlay = Color(0x66000000);
+  static const Color link = Color(0xFF1D4ED8);
+  static const Color focus = Color(0xFF2563EB);
+  static const Color separator = Color(0xFFCBD5E1);
 }
 
 /// Semantic color tokens for dark mode.
@@ -48,6 +59,17 @@ class AppColorsDark {
   static const Color border = Color(0xFF334155);
   static const Color disabled = Color(0xFF334155);
   static const Color onDisabled = Color(0xFF64748B);
+  static const Color primaryMuted = Color(0xFF1E3A8A);
+  static const Color destructiveMuted = Color(0xFF7F1D1D);
+  static const Color successMuted = Color(0xFF14532D);
+  static const Color warningMuted = Color(0xFF78350F);
+  static const Color surfaceSecondary = Color(0xFF273549);
+  static const Color surfaceTertiary = Color(0xFF334155);
+  static const Color textTertiary = Color(0xFF64748B);
+  static const Color overlay = Color(0x99000000);
+  static const Color link = Color(0xFF60A5FA);
+  static const Color focus = Color(0xFF60A5FA);
+  static const Color separator = Color(0xFF334155);
 }
 
 /// [ThemeExtension] exposing semantic color tokens through [Theme.of].
@@ -75,6 +97,17 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.border,
     required this.disabled,
     required this.onDisabled,
+    required this.primaryMuted,
+    required this.destructiveMuted,
+    required this.successMuted,
+    required this.warningMuted,
+    required this.surfaceSecondary,
+    required this.surfaceTertiary,
+    required this.textTertiary,
+    required this.overlay,
+    required this.link,
+    required this.focus,
+    required this.separator,
   });
 
   final Color primary;
@@ -96,6 +129,17 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color border;
   final Color disabled;
   final Color onDisabled;
+  final Color primaryMuted;
+  final Color destructiveMuted;
+  final Color successMuted;
+  final Color warningMuted;
+  final Color surfaceSecondary;
+  final Color surfaceTertiary;
+  final Color textTertiary;
+  final Color overlay;
+  final Color link;
+  final Color focus;
+  final Color separator;
 
   static const AppColors light = AppColors(
     primary: AppColorsLight.primary,
@@ -117,6 +161,17 @@ class AppColors extends ThemeExtension<AppColors> {
     border: AppColorsLight.border,
     disabled: AppColorsLight.disabled,
     onDisabled: AppColorsLight.onDisabled,
+    primaryMuted: AppColorsLight.primaryMuted,
+    destructiveMuted: AppColorsLight.destructiveMuted,
+    successMuted: AppColorsLight.successMuted,
+    warningMuted: AppColorsLight.warningMuted,
+    surfaceSecondary: AppColorsLight.surfaceSecondary,
+    surfaceTertiary: AppColorsLight.surfaceTertiary,
+    textTertiary: AppColorsLight.textTertiary,
+    overlay: AppColorsLight.overlay,
+    link: AppColorsLight.link,
+    focus: AppColorsLight.focus,
+    separator: AppColorsLight.separator,
   );
 
   static const AppColors dark = AppColors(
@@ -139,6 +194,17 @@ class AppColors extends ThemeExtension<AppColors> {
     border: AppColorsDark.border,
     disabled: AppColorsDark.disabled,
     onDisabled: AppColorsDark.onDisabled,
+    primaryMuted: AppColorsDark.primaryMuted,
+    destructiveMuted: AppColorsDark.destructiveMuted,
+    successMuted: AppColorsDark.successMuted,
+    warningMuted: AppColorsDark.warningMuted,
+    surfaceSecondary: AppColorsDark.surfaceSecondary,
+    surfaceTertiary: AppColorsDark.surfaceTertiary,
+    textTertiary: AppColorsDark.textTertiary,
+    overlay: AppColorsDark.overlay,
+    link: AppColorsDark.link,
+    focus: AppColorsDark.focus,
+    separator: AppColorsDark.separator,
   );
 
   /// Resolves the current [AppColors] from [context], falling back to
@@ -170,6 +236,17 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? border,
     Color? disabled,
     Color? onDisabled,
+    Color? primaryMuted,
+    Color? destructiveMuted,
+    Color? successMuted,
+    Color? warningMuted,
+    Color? surfaceSecondary,
+    Color? surfaceTertiary,
+    Color? textTertiary,
+    Color? overlay,
+    Color? link,
+    Color? focus,
+    Color? separator,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -191,6 +268,17 @@ class AppColors extends ThemeExtension<AppColors> {
       border: border ?? this.border,
       disabled: disabled ?? this.disabled,
       onDisabled: onDisabled ?? this.onDisabled,
+      primaryMuted: primaryMuted ?? this.primaryMuted,
+      destructiveMuted: destructiveMuted ?? this.destructiveMuted,
+      successMuted: successMuted ?? this.successMuted,
+      warningMuted: warningMuted ?? this.warningMuted,
+      surfaceSecondary: surfaceSecondary ?? this.surfaceSecondary,
+      surfaceTertiary: surfaceTertiary ?? this.surfaceTertiary,
+      textTertiary: textTertiary ?? this.textTertiary,
+      overlay: overlay ?? this.overlay,
+      link: link ?? this.link,
+      focus: focus ?? this.focus,
+      separator: separator ?? this.separator,
     );
   }
 
@@ -217,6 +305,17 @@ class AppColors extends ThemeExtension<AppColors> {
       border: Color.lerp(border, other.border, t)!,
       disabled: Color.lerp(disabled, other.disabled, t)!,
       onDisabled: Color.lerp(onDisabled, other.onDisabled, t)!,
+      primaryMuted: Color.lerp(primaryMuted, other.primaryMuted, t)!,
+      destructiveMuted: Color.lerp(destructiveMuted, other.destructiveMuted, t)!,
+      successMuted: Color.lerp(successMuted, other.successMuted, t)!,
+      warningMuted: Color.lerp(warningMuted, other.warningMuted, t)!,
+      surfaceSecondary: Color.lerp(surfaceSecondary, other.surfaceSecondary, t)!,
+      surfaceTertiary: Color.lerp(surfaceTertiary, other.surfaceTertiary, t)!,
+      textTertiary: Color.lerp(textTertiary, other.textTertiary, t)!,
+      overlay: Color.lerp(overlay, other.overlay, t)!,
+      link: Color.lerp(link, other.link, t)!,
+      focus: Color.lerp(focus, other.focus, t)!,
+      separator: Color.lerp(separator, other.separator, t)!,
     );
   }
 }

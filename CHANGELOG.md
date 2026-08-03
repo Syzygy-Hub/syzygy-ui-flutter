@@ -5,6 +5,26 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-08-03
+
+### Added
+
+- **Buttons**: `LoadingButton` (built-in spinner, disabled while loading), `AppFloatingActionButton` (avoids colliding with Material's own `FloatingActionButton`), `ButtonGroup` (single/multi-select segmented row).
+- **Inputs**: `TextArea` (multi-line, via `TextField`'s native `minLines`/`maxLines`), `OTPInput` (auto-advancing focus per digit), `TagInput` (renders entered items as dismissible `Chip`s), `DatePickerField`/`TimePickerField` (wrap Flutter's native `showDatePicker`/`showTimePicker`), `AppFormField` (avoids colliding with Flutter's own `FormField<T>` base class), `PasswordStrengthIndicator` (real length + character-class heuristic, not hardcoded).
+- **Display**: `AvatarGroup` (overlapping `Avatar` stack with "+N" overflow), `StatsCard` (aka `MetricCard`; label/value/trend), `RatingInput` (interactive counterpart to the read-only `StarRatingView`).
+- **Feedback**: `SkeletonView` (rectangle/circle shimmer placeholder, generalizing `ShimmerView`'s animation), `CircularProgress` (themed wrapper around Material's own determinate/indeterminate `CircularProgressIndicator`), `InlineAlert` (aka `Banner`; 4 variants using new `*Muted` color tokens — named to avoid colliding with both Material's `Banner` and `MaterialBanner`), `AppSnackbar` (a `SnackBar`-building factory for `ScaffoldMessenger.showSnackBar`, rather than reinventing Material's overlay/queueing system).
+- **Overlay**: `ActionSheet` (labelled actions in a bottom sheet, following `BottomSheet`'s existing `.show(context, ...)` convention), `Popover` (anchored floating content via `CompositedTransformTarget`/`CompositedTransformFollower`), `AppTooltip` (themed wrapper around Material's own `Tooltip`, avoiding a name collision).
+- **Navigation**: `SideMenu` (aka `Drawer`; wraps Material's own `Drawer` for `Scaffold(drawer: ...)` integration rather than a fully custom overlay), `FloatingTabBar` (floating pill bar with icon **and** label per item — fills the gap left by `TabBar` (edge-to-edge + labeled) and `BottomNavigationBar` (floating + icon-only)), `StepIndicator` (aka `WizardSteps`), `Breadcrumbs`.
+- **Layout**: `AdaptiveStack` (Row above a breakpoint, Column below, via `LayoutBuilder`), `FlowLayout` (thin wrapper over Flutter's native `Wrap`), `StickyHeader` (via `CustomScrollView` + `SliverPersistentHeader`).
+- **Transitions**: `NavigationTransitions.scaleTransition`, `.fadeThroughTransition` (sequenced fade-out-then-fade-in via non-overlapping `Interval`s, not a simultaneous cross-fade).
+- **Design Tokens**: new color tokens `primaryMuted`, `destructiveMuted`, `successMuted`, `warningMuted`, `surfaceSecondary`, `surfaceTertiary`, `textTertiary`, `overlay`, `link`, `focus`, `separator` (light + dark); `AppTypography.largeTitle`; spacing `xxs`/`xxxl`; radius `xs`/`xl`; new token files/categories `AppElevation`, `AppOpacity`, `AppBorderWidth`, `AppIconSize`, `AppAnimationDuration`/`AppAnimationEasing`.
+
+### Changed
+
+- README's Design Tokens section condensed from per-token prose paragraphs to compact markdown reference tables, for both existing and newly added token categories.
+
+No carry-over patch fixes were needed in this repo for this release — the PagerView Layout-vs-Navigation categorization fix landed in a previous release and required no further changes here.
+
 ## [2.0.0] - 2026-08-01
 
 ### Changed — BREAKING

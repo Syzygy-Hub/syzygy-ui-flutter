@@ -69,4 +69,52 @@ class NavigationTransitions {
       },
     );
   }
+
+  /// Scales the incoming page in (and the outgoing page out) combined with
+  /// a fade.
+  static PageRouteBuilder<T> scaleTransition<T>({required WidgetBuilder builder}) {
+    return PageRouteBuilder<T>(
+      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
+      transitionDuration: _duration,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: Tween<double>(begin: 0.85, end: 1.0).animate(
+            CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          ),
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+    );
+  }
+
+  /// A "fade through" transition: the outgoing page fades out first, then
+  /// the incoming page fades in — sequenced, not a simultaneous cross-fade
+  /// like [crossFadeTransition]. Implemented via two non-overlapping
+  /// [Interval]s of the same transition animation.
+  static PageRouteBuilder<T> fadeThroughTransition<T>({required WidgetBuilder builder}) {
+    return PageRouteBuilder<T>(
+      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
+      transitionDuration: _duration,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // First half: fade the outgoing content out. Second half: fade the
+        // incoming content in. Both stages are driven by the same
+        // `animation`, just scoped to non-overlapping intervals.
+        final fadeOut = Tween<double>(begin: 1.0, end: 0.0).animate(
+          CurvedAnimation(parent: animation, curve: const Interval(0.0, 0.5)),
+        );
+        final fadeIn = Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(parent: animation, curve: const Interval(0.5, 1.0)),
+        );
+
+        return AnimatedBuilder(
+          animation: animation,
+          child: child,
+          builder: (context, child) {
+            final opacity = animation.value < 0.5 ? fadeOut.value : fadeIn.value;
+            return Opacity(opacity: opacity, child: child);
+          },
+        );
+      },
+    );
+  }
 }

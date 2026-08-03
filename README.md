@@ -22,7 +22,7 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  syzygy_ui_flutter: ^2.0.0
+  syzygy_ui_flutter: ^2.1.0
 ```
 
 Then run:
@@ -32,18 +32,20 @@ flutter pub get
 
 ## Components
 
-Several components are named to avoid colliding with Flutter Material's own widgets of the same name — either by using a distinct name (e.g. `SliderInput` instead of `Slider`, `SyzygyAppBar` instead of `AppBar`), or by hiding Material's version in favor of this library's (e.g. `import 'package:flutter/material.dart' hide TabBar;`), the same way this library's own `Badge` already hides Material's `Badge`. Any collision-hiding component is noted below.
+68 components across 9 categories (counted individually below, excluding token/transition utility classes).
 
-- **Buttons:** PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, AppIconButton
-- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper
-- **Display:** Avatar, DividerLine, Chip *(hides Material's `Chip`)*, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge
-- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView
-- **Overlay:** ModalDialog, BottomSheet *(hides Material's `BottomSheet`)*, CollapsibleView
-- **Navigation:** AppBackButton, TabBar *(hides Material's `TabBar`)*, BottomNavigationBar *(hides Material's `BottomNavigationBar`)*, SyzygyAppBar *(distinct name — no hide needed; implements `PreferredSizeWidget` so it still works in `Scaffold(appBar: ...)`)*
+Several components are named to avoid colliding with Flutter Material's own widgets of the same name — either by using a distinct name (e.g. `SliderInput` instead of `Slider`, `SyzygyAppBar` instead of `AppBar`), or by hiding Material's version in favor of this library's (e.g. `import 'package:flutter/material.dart' hide TabBar;`), the same way this library's own `Badge` already hides Material's `Badge`. Any collision-hiding or collision-avoiding component is noted below.
+
+- **Buttons:** PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, AppIconButton, LoadingButton, AppFloatingActionButton *(distinct name — avoids colliding with Material's `FloatingActionButton`)*, ButtonGroup
+- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper, TextArea, OTPInput, TagInput, DatePickerField, TimePickerField, AppFormField *(distinct name — avoids colliding with Flutter's own `FormField<T>` base class)*, PasswordStrengthIndicator
+- **Display:** Avatar, DividerLine, Chip *(hides Material's `Chip`)*, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, AvatarGroup, StatsCard *(aka MetricCard)*, RatingInput
+- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView, SkeletonView, CircularProgress, InlineAlert *(aka Banner — distinct name avoids colliding with both Material's `Banner` and `MaterialBanner`)*, AppSnackbar *(builder around Material's own `SnackBar`, not a widget — distinct name avoids colliding with Material's `SnackBar`)*
+- **Overlay:** ModalDialog, BottomSheet *(hides Material's `BottomSheet`)*, CollapsibleView, ActionSheet, Popover, AppTooltip *(distinct name — avoids colliding with Material's `Tooltip`)*
+- **Navigation:** AppBackButton, TabBar *(hides Material's `TabBar`)*, BottomNavigationBar *(hides Material's `BottomNavigationBar`)*, SyzygyAppBar *(distinct name — no hide needed; implements `PreferredSizeWidget` so it still works in `Scaffold(appBar: ...)`)*, SideMenu *(aka Drawer — wraps Material's own `Drawer` for `Scaffold(drawer: ...)` integration)*, FloatingTabBar (floating pill bar, icon + label — distinct from the icon-only `BottomNavigationBar`), StepIndicator *(aka WizardSteps)*, Breadcrumbs
 - **Cards:** CardView
 - **Badges:** Badge *(hides Material's `Badge`)*
-- **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*
-- **Transitions:** `NavigationTransitions.slideTransition`, `.crossFadeTransition`, `.slideVerticalTransition`, `.modalPresentationTransition` — `PageRouteBuilder` factories
+- **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*, AdaptiveStack, FlowLayout, StickyHeader
+- **Transitions:** `NavigationTransitions.slideTransition`, `.crossFadeTransition`, `.slideVerticalTransition`, `.modalPresentationTransition`, `.scaleTransition`, `.fadeThroughTransition` — `PageRouteBuilder` factories
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
@@ -52,7 +54,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 All tokens live under `lib/src/tokens/`.
 
 ### Colors (`AppColors`)
-Registered as a `ThemeExtension<AppColors>` via `AppTheme.light()`/`AppTheme.dark()`; resolve with `AppColors.of(context)`.
+Registered as a `ThemeExtension<AppColors>` via `AppTheme.light()`/`AppTheme.dark()`; resolve with `AppColors.of(context)`. Each color also has a matching `on*` counterpart (e.g. `onPrimary`) for content placed on top of it.
 
 | Token | Light | Dark |
 |---|---|---|
@@ -65,11 +67,20 @@ Registered as a `ThemeExtension<AppColors>` via `AppTheme.light()`/`AppTheme.dar
 | `background` | `#F8FAFC` | `#0F172A` |
 | `border` | `#E2E8F0` | `#334155` |
 | `disabled` | `#CBD5E1` | `#334155` |
-
-Each color also has a matching `on*` counterpart (e.g. `onPrimary`) for content placed on top of it.
+| `primaryMuted` | `#DBEAFE` | `#1E3A8A` |
+| `destructiveMuted` | `#FEE2E2` | `#7F1D1D` |
+| `successMuted` | `#DCFCE7` | `#14532D` |
+| `warningMuted` | `#FEF3C7` | `#78350F` |
+| `surfaceSecondary` | `#F1F5F9` | `#273549` |
+| `surfaceTertiary` | `#E2E8F0` | `#334155` |
+| `textTertiary` | `#94A3B8` | `#64748B` |
+| `overlay` | `#000000` @ 40% | `#000000` @ 60% |
+| `link` | `#1D4ED8` | `#60A5FA` |
+| `focus` | `#2563EB` | `#60A5FA` |
+| `separator` | `#CBD5E1` | `#334155` |
 
 ### Typography (`AppTypography`)
-Thin wrappers over `Theme.of(context).textTheme`: `displayLarge` · `headlineLarge` · `headlineMedium` · `titleLarge` · `titleMedium` · `bodyLarge` · `bodyMedium` · `bodySmall` · `labelLarge` · `labelSmall`.
+Thin wrappers over `Theme.of(context).textTheme`: `displayLarge` · `headlineLarge` · `headlineMedium` · `titleLarge` · `titleMedium` · `bodyLarge` · `bodyMedium` · `bodySmall` · `labelLarge` · `labelSmall` · `largeTitle` (bold `displayLarge`).
 
 ```dart
 Text('Hello', style: AppTypography.titleMedium(context))
@@ -79,21 +90,74 @@ Text('Hello', style: AppTypography.titleMedium(context))
 
 | Token | Value |
 |---|---|
+| `xxs` | 2.0 |
 | `xs` | 4.0 |
 | `sm` | 8.0 |
 | `md` | 16.0 |
 | `lg` | 24.0 |
 | `xl` | 32.0 |
 | `xxl` | 48.0 |
+| `xxxl` | 64.0 |
 
 ### Corner Radius (`AppRadius`)
 
 | Token | Value |
 |---|---|
+| `xs` | 2.0 |
 | `sm` | 4.0 |
 | `md` | 8.0 |
 | `lg` | 16.0 |
+| `xl` | 16.0 (shares `lg`'s value under a distinct semantic name) |
 | `full` | 999.0 (pill/capsule shapes) |
+
+### Elevation (`AppElevation`)
+
+| Token | Value |
+|---|---|
+| `none` | 0.0 |
+| `sm` | 1.0 |
+| `md` | 4.0 |
+| `lg` | 8.0 |
+
+### Opacity (`AppOpacity`)
+
+| Token | Value |
+|---|---|
+| `disabled` | 0.38 |
+| `secondary` | 0.60 |
+| `overlay` | 0.54 |
+
+### Border Width (`AppBorderWidth`)
+
+| Token | Value |
+|---|---|
+| `thin` | 0.5 |
+| `regular` | 1.0 |
+| `thick` | 2.0 |
+
+### Icon Size (`AppIconSize`)
+
+| Token | Value |
+|---|---|
+| `sm` | 16.0 |
+| `md` | 20.0 |
+| `lg` | 24.0 |
+| `xl` | 32.0 |
+
+### Animation (`AppAnimationDuration` / `AppAnimationEasing`)
+
+| Duration Token | Value |
+|---|---|
+| `fast` | 150ms |
+| `normal` | 300ms |
+| `slow` | 500ms |
+
+| Easing Token | Maps to |
+|---|---|
+| `standard` | `Curves.easeInOut` |
+| `decelerate` | `Curves.decelerate` |
+| `accelerate` | `Curves.easeIn` |
+| `spring` | `Curves.elasticOut` (closest built-in approximation — Flutter has no true physics-spring curve) |
 
 ## Usage
 

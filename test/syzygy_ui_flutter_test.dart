@@ -531,6 +531,305 @@ void main() {
         NavigationTransitions.modalPresentationTransition(builder: (_) => const SizedBox()),
         isA<PageRouteBuilder>(),
       );
+      expect(
+        NavigationTransitions.scaleTransition(builder: (_) => const SizedBox()),
+        isA<PageRouteBuilder>(),
+      );
+      expect(
+        NavigationTransitions.fadeThroughTransition(builder: (_) => const SizedBox()),
+        isA<PageRouteBuilder>(),
+      );
+    });
+
+    testWidgets('LoadingButton shows spinner when loading', (tester) async {
+      await tester.pumpWidget(_wrap(
+        LoadingButton(label: 'Save', isLoading: true, onPressed: () {}),
+      ));
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Save'), findsNothing);
+    });
+
+    testWidgets('LoadingButton shows label when not loading', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(_wrap(
+        LoadingButton(label: 'Save', isLoading: false, onPressed: () => tapped = true),
+      ));
+      expect(find.text('Save'), findsOneWidget);
+      await tester.tap(find.text('Save'));
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('AppFloatingActionButton renders icon', (tester) async {
+      await tester.pumpWidget(_wrap(
+        AppFloatingActionButton(icon: Icons.add, onPressed: () {}),
+      ));
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
+
+    testWidgets('ButtonGroup renders options and reports selection', (tester) async {
+      List<int> selection = [0];
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return ButtonGroup(
+            options: const ['Day', 'Week', 'Month'],
+            selection: selection,
+            onSelectionChange: (v) => setState(() => selection = v),
+          );
+        }),
+      ));
+      expect(find.text('Week'), findsOneWidget);
+      await tester.tap(find.text('Week'));
+      await tester.pump();
+      expect(selection, [1]);
+    });
+
+    testWidgets('TextArea renders label and hint', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const TextArea(label: 'Bio', hintText: 'Tell us about yourself'),
+      ));
+      expect(find.text('Bio'), findsOneWidget);
+    });
+
+    testWidgets('OTPInput renders length boxes', (tester) async {
+      await tester.pumpWidget(_wrap(
+        OTPInput(length: 4, code: '', onCodeChange: (_) {}),
+      ));
+      expect(find.byType(TextField), findsNWidgets(4));
+    });
+
+    testWidgets('TagInput renders tags as chips', (tester) async {
+      await tester.pumpWidget(_wrap(
+        TagInput(tags: const ['flutter', 'dart'], onTagsChange: (_) {}),
+      ));
+      expect(find.text('flutter'), findsOneWidget);
+      expect(find.text('dart'), findsOneWidget);
+    });
+
+    testWidgets('DatePickerField renders label', (tester) async {
+      await tester.pumpWidget(_wrap(
+        DatePickerField(label: 'Birthday', onDateChange: (_) {}),
+      ));
+      expect(find.text('Birthday'), findsOneWidget);
+      expect(find.text('Select date'), findsOneWidget);
+    });
+
+    testWidgets('TimePickerField renders label', (tester) async {
+      await tester.pumpWidget(_wrap(
+        TimePickerField(label: 'Reminder', onTimeChange: (_) {}),
+      ));
+      expect(find.text('Reminder'), findsOneWidget);
+      expect(find.text('Select time'), findsOneWidget);
+    });
+
+    testWidgets('AppFormField renders label, child, and error', (tester) async {
+      await tester.pumpWidget(_wrap(
+        AppFormField(
+          label: 'Email',
+          error: 'Required',
+          child: const TextField(),
+        ),
+      ));
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.text('Required'), findsOneWidget);
+    });
+
+    testWidgets('PasswordStrengthIndicator labels a strong password', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const PasswordStrengthIndicator(password: 'Str0ng!Passw0rd'),
+      ));
+      expect(find.text('Very Strong'), findsOneWidget);
+    });
+
+    testWidgets('PasswordStrengthIndicator labels a weak password', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const PasswordStrengthIndicator(password: 'abc'),
+      ));
+      expect(find.text('Weak'), findsOneWidget);
+    });
+
+    testWidgets('AvatarGroup renders avatars with overflow', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const AvatarGroup(avatars: ['A', 'B', 'C', 'D', 'E'], max: 3),
+      ));
+      expect(find.text('A'), findsOneWidget);
+      expect(find.text('+2'), findsOneWidget);
+    });
+
+    testWidgets('StatsCard renders label, value, and trend', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const StatsCard(
+          label: 'Revenue',
+          value: '\$12,400',
+          trend: TrendDirection.up,
+          trendValue: '+12%',
+        ),
+      ));
+      expect(find.text('Revenue'), findsOneWidget);
+      expect(find.text('\$12,400'), findsOneWidget);
+      expect(find.text('+12%'), findsOneWidget);
+    });
+
+    testWidgets('RatingInput reports tapped rating', (tester) async {
+      int? rated;
+      await tester.pumpWidget(_wrap(
+        RatingInput(rating: 2, onRatingChange: (v) => rated = v),
+      ));
+      expect(find.byIcon(Icons.star), findsNWidgets(2));
+      final stars = find.byIcon(Icons.star_border);
+      await tester.tap(stars.last);
+      expect(rated, isNotNull);
+    });
+
+    testWidgets('SkeletonView renders', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const SkeletonView(shape: SkeletonShape.circle, height: 40),
+      ));
+      expect(find.byType(SkeletonView), findsOneWidget);
+    });
+
+    testWidgets('CircularProgress renders determinate value', (tester) async {
+      await tester.pumpWidget(_wrap(const CircularProgress(progress: 0.5)));
+      final indicator = tester.widget<CircularProgressIndicator>(find.byType(CircularProgressIndicator));
+      expect(indicator.value, 0.5);
+    });
+
+    testWidgets('InlineAlert renders message for each variant', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const InlineAlert(message: 'Saved', variant: AlertVariant.success),
+      ));
+      expect(find.text('Saved'), findsOneWidget);
+    });
+
+    testWidgets('AppSnackbar.build produces a usable SnackBar', (tester) async {
+      await tester.pumpWidget(_wrap(
+        Builder(builder: (context) {
+          return ElevatedButton(
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              AppSnackbar.build(context, message: 'Copied to clipboard'),
+            ),
+            child: const Text('Show'),
+          );
+        }),
+      ));
+      await tester.tap(find.text('Show'));
+      await tester.pump();
+      expect(find.text('Copied to clipboard'), findsOneWidget);
+    });
+
+    testWidgets('ActionSheet.show displays actions', (tester) async {
+      await tester.pumpWidget(_wrap(
+        Builder(builder: (context) {
+          return ElevatedButton(
+            onPressed: () => ActionSheet.show(context, actions: [
+              ActionSheetItem(label: 'Delete', isDestructive: true, onTap: () {}),
+            ]),
+            child: const Text('Open sheet'),
+          );
+        }),
+      ));
+      await tester.tap(find.text('Open sheet'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete'), findsOneWidget);
+    });
+
+    testWidgets('Popover shows content on tap', (tester) async {
+      await tester.pumpWidget(_wrap(
+        Popover(
+          content: const Text('Popover content'),
+          child: const Text('Trigger'),
+        ),
+      ));
+      await tester.tap(find.text('Trigger'));
+      await tester.pump();
+      expect(find.text('Popover content'), findsOneWidget);
+    });
+
+    testWidgets('AppTooltip wraps child and carries message', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const AppTooltip(message: 'Helpful hint', child: Icon(Icons.info)),
+      ));
+      expect(find.byIcon(Icons.info), findsOneWidget);
+    });
+
+    testWidgets('SideMenu renders inside a Scaffold drawer', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.light(),
+        home: Scaffold(
+          drawer: const SideMenu(child: Text('Menu content')),
+          body: const SizedBox(),
+        ),
+      ));
+      final scaffoldState = tester.state<ScaffoldState>(find.byType(Scaffold));
+      scaffoldState.openDrawer();
+      await tester.pumpAndSettle();
+      expect(find.text('Menu content'), findsOneWidget);
+    });
+
+    testWidgets('FloatingTabBar renders items and responds to tap', (tester) async {
+      var selection = 'home';
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return FloatingTabBar<String>(
+            items: const [
+              TabBarItem(tag: 'home', icon: Icons.home, label: 'Home'),
+              TabBarItem(tag: 'profile', icon: Icons.person, label: 'Profile'),
+            ],
+            selection: selection,
+            onSelectionChange: (v) => setState(() => selection = v),
+          );
+        }),
+      ));
+      expect(find.text('Home'), findsOneWidget);
+      await tester.tap(find.text('Profile'));
+      await tester.pump();
+      expect(selection, 'profile');
+    });
+
+    testWidgets('StepIndicator renders steps', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const StepIndicator(steps: ['Info', 'Payment', 'Review'], currentStep: 1),
+      ));
+      expect(find.byType(StepIndicator), findsOneWidget);
+    });
+
+    testWidgets('Breadcrumbs renders labels and responds to tap', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(_wrap(
+        Breadcrumbs(items: [
+          BreadcrumbItem(label: 'Home', onTap: () => tapped = true),
+          const BreadcrumbItem(label: 'Settings'),
+        ]),
+      ));
+      expect(find.text('Home'), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
+      await tester.tap(find.text('Home'));
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('AdaptiveStack renders Row above breakpoint', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const AdaptiveStack(breakpoint: 400, children: [Text('A'), Text('B')]),
+      ));
+      expect(find.byType(Row), findsWidgets);
+      expect(find.text('A'), findsOneWidget);
+    });
+
+    testWidgets('FlowLayout wraps children', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const FlowLayout(children: [Text('One'), Text('Two')]),
+      ));
+      expect(find.byType(Wrap), findsOneWidget);
+    });
+
+    testWidgets('StickyHeader renders header and child', (tester) async {
+      await tester.pumpWidget(_wrap(
+        StickyHeader(
+          header: Container(color: Colors.blue, child: const Text('Header')),
+          child: const Text('Body content'),
+        ),
+      ));
+      expect(find.text('Header'), findsOneWidget);
+      expect(find.text('Body content'), findsOneWidget);
     });
   });
 }

@@ -7,6 +7,13 @@ class AppTypography {
   static TextStyle? displayLarge(BuildContext context) =>
       Theme.of(context).textTheme.displayLarge;
 
+  /// A large display style for hero/splash-style headings, mapped to
+  /// [TextTheme.displayLarge] with a bold weight override.
+  static TextStyle? largeTitle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .displayLarge
+      ?.copyWith(fontWeight: FontWeight.bold);
+
   static TextStyle? headlineLarge(BuildContext context) =>
       Theme.of(context).textTheme.headlineLarge;
 
