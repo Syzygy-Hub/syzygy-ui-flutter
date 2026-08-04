@@ -24,13 +24,27 @@ class AppColorsLight {
   static const Color disabled = Color(0xFFCBD5E1);
   static const Color onDisabled = Color(0xFF94A3B8);
   static const Color primaryMuted = Color(0xFFDBEAFE);
+  /// Lightest tint of `primary` for large-area background washes.
+  /// ⚠️ No prior equivalent; hex inferred as lighter than `primaryMuted`.
+  static const Color primarySubtle = Color(0xFFEFF6FF);
   static const Color destructiveMuted = Color(0xFFFEE2E2);
+  /// Same hex as `destructiveMuted` — error and destructive share the same base colour.
+  static const Color errorMuted = Color(0xFFFEE2E2);
   static const Color successMuted = Color(0xFFDCFCE7);
   static const Color warningMuted = Color(0xFFFEF3C7);
   static const Color surfaceSecondary = Color(0xFFF1F5F9);
   static const Color surfaceTertiary = Color(0xFFE2E8F0);
+  /// Same as `onSurface`; explicit alias for readability.
+  static const Color textPrimary = Color(0xFF0F172A);
+  /// ⚠️ No prior equivalent; hex inferred between `onSurface` and `textTertiary`.
+  static const Color textSecondary = Color(0xFF475569);
   static const Color textTertiary = Color(0xFF94A3B8);
+  /// ⚠️ No prior equivalent; hex inferred (same channel as dark `textSecondary`).
+  static const Color textDisabled = Color(0xFF94A3B8);
+  static const Color textInverse = Color(0xFFFFFFFF);
   static const Color overlay = Color(0x66000000);
+  /// Same hex as `overlay`; consumers apply an opacity modifier for scrim use-cases.
+  static const Color scrim = Color(0x66000000);
   static const Color link = Color(0xFF1D4ED8);
   static const Color focus = Color(0xFF2563EB);
   static const Color separator = Color(0xFFCBD5E1);
@@ -60,13 +74,27 @@ class AppColorsDark {
   static const Color disabled = Color(0xFF334155);
   static const Color onDisabled = Color(0xFF64748B);
   static const Color primaryMuted = Color(0xFF1E3A8A);
+  /// Lightest tint of `primary` for large-area background washes.
+  /// ⚠️ No prior equivalent; hex inferred as lighter than `primaryMuted`.
+  static const Color primarySubtle = Color(0xFF0B1E42);
   static const Color destructiveMuted = Color(0xFF7F1D1D);
+  /// Same hex as `destructiveMuted` — error and destructive share the same base colour.
+  static const Color errorMuted = Color(0xFF7F1D1D);
   static const Color successMuted = Color(0xFF14532D);
   static const Color warningMuted = Color(0xFF78350F);
   static const Color surfaceSecondary = Color(0xFF273549);
   static const Color surfaceTertiary = Color(0xFF334155);
+  /// Same as `onSurface`; explicit alias for readability.
+  static const Color textPrimary = Color(0xFFF1F5F9);
+  /// ⚠️ No prior equivalent; hex inferred between `onSurface` and `textTertiary`.
+  static const Color textSecondary = Color(0xFF94A3B8);
   static const Color textTertiary = Color(0xFF64748B);
+  /// ⚠️ No prior equivalent; hex inferred (same channel as light `textSecondary`).
+  static const Color textDisabled = Color(0xFF475569);
+  static const Color textInverse = Color(0xFF0F172A);
   static const Color overlay = Color(0x99000000);
+  /// Same hex as `overlay`; consumers apply an opacity modifier for scrim use-cases.
+  static const Color scrim = Color(0x99000000);
   static const Color link = Color(0xFF60A5FA);
   static const Color focus = Color(0xFF60A5FA);
   static const Color separator = Color(0xFF334155);
@@ -98,13 +126,20 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.disabled,
     required this.onDisabled,
     required this.primaryMuted,
+    required this.primarySubtle,
     required this.destructiveMuted,
+    required this.errorMuted,
     required this.successMuted,
     required this.warningMuted,
     required this.surfaceSecondary,
     required this.surfaceTertiary,
+    required this.textPrimary,
+    required this.textSecondary,
     required this.textTertiary,
+    required this.textDisabled,
+    required this.textInverse,
     required this.overlay,
+    required this.scrim,
     required this.link,
     required this.focus,
     required this.separator,
@@ -130,13 +165,20 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color disabled;
   final Color onDisabled;
   final Color primaryMuted;
+  final Color primarySubtle;
   final Color destructiveMuted;
+  final Color errorMuted;
   final Color successMuted;
   final Color warningMuted;
   final Color surfaceSecondary;
   final Color surfaceTertiary;
+  final Color textPrimary;
+  final Color textSecondary;
   final Color textTertiary;
+  final Color textDisabled;
+  final Color textInverse;
   final Color overlay;
+  final Color scrim;
   final Color link;
   final Color focus;
   final Color separator;
@@ -162,13 +204,20 @@ class AppColors extends ThemeExtension<AppColors> {
     disabled: AppColorsLight.disabled,
     onDisabled: AppColorsLight.onDisabled,
     primaryMuted: AppColorsLight.primaryMuted,
+    primarySubtle: AppColorsLight.primarySubtle,
     destructiveMuted: AppColorsLight.destructiveMuted,
+    errorMuted: AppColorsLight.errorMuted,
     successMuted: AppColorsLight.successMuted,
     warningMuted: AppColorsLight.warningMuted,
     surfaceSecondary: AppColorsLight.surfaceSecondary,
     surfaceTertiary: AppColorsLight.surfaceTertiary,
+    textPrimary: AppColorsLight.textPrimary,
+    textSecondary: AppColorsLight.textSecondary,
     textTertiary: AppColorsLight.textTertiary,
+    textDisabled: AppColorsLight.textDisabled,
+    textInverse: AppColorsLight.textInverse,
     overlay: AppColorsLight.overlay,
+    scrim: AppColorsLight.scrim,
     link: AppColorsLight.link,
     focus: AppColorsLight.focus,
     separator: AppColorsLight.separator,
@@ -195,13 +244,20 @@ class AppColors extends ThemeExtension<AppColors> {
     disabled: AppColorsDark.disabled,
     onDisabled: AppColorsDark.onDisabled,
     primaryMuted: AppColorsDark.primaryMuted,
+    primarySubtle: AppColorsDark.primarySubtle,
     destructiveMuted: AppColorsDark.destructiveMuted,
+    errorMuted: AppColorsDark.errorMuted,
     successMuted: AppColorsDark.successMuted,
     warningMuted: AppColorsDark.warningMuted,
     surfaceSecondary: AppColorsDark.surfaceSecondary,
     surfaceTertiary: AppColorsDark.surfaceTertiary,
+    textPrimary: AppColorsDark.textPrimary,
+    textSecondary: AppColorsDark.textSecondary,
     textTertiary: AppColorsDark.textTertiary,
+    textDisabled: AppColorsDark.textDisabled,
+    textInverse: AppColorsDark.textInverse,
     overlay: AppColorsDark.overlay,
+    scrim: AppColorsDark.scrim,
     link: AppColorsDark.link,
     focus: AppColorsDark.focus,
     separator: AppColorsDark.separator,
@@ -237,13 +293,20 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? disabled,
     Color? onDisabled,
     Color? primaryMuted,
+    Color? primarySubtle,
     Color? destructiveMuted,
+    Color? errorMuted,
     Color? successMuted,
     Color? warningMuted,
     Color? surfaceSecondary,
     Color? surfaceTertiary,
+    Color? textPrimary,
+    Color? textSecondary,
     Color? textTertiary,
+    Color? textDisabled,
+    Color? textInverse,
     Color? overlay,
+    Color? scrim,
     Color? link,
     Color? focus,
     Color? separator,
@@ -269,13 +332,20 @@ class AppColors extends ThemeExtension<AppColors> {
       disabled: disabled ?? this.disabled,
       onDisabled: onDisabled ?? this.onDisabled,
       primaryMuted: primaryMuted ?? this.primaryMuted,
+      primarySubtle: primarySubtle ?? this.primarySubtle,
       destructiveMuted: destructiveMuted ?? this.destructiveMuted,
+      errorMuted: errorMuted ?? this.errorMuted,
       successMuted: successMuted ?? this.successMuted,
       warningMuted: warningMuted ?? this.warningMuted,
       surfaceSecondary: surfaceSecondary ?? this.surfaceSecondary,
       surfaceTertiary: surfaceTertiary ?? this.surfaceTertiary,
+      textPrimary: textPrimary ?? this.textPrimary,
+      textSecondary: textSecondary ?? this.textSecondary,
       textTertiary: textTertiary ?? this.textTertiary,
+      textDisabled: textDisabled ?? this.textDisabled,
+      textInverse: textInverse ?? this.textInverse,
       overlay: overlay ?? this.overlay,
+      scrim: scrim ?? this.scrim,
       link: link ?? this.link,
       focus: focus ?? this.focus,
       separator: separator ?? this.separator,
@@ -306,13 +376,20 @@ class AppColors extends ThemeExtension<AppColors> {
       disabled: Color.lerp(disabled, other.disabled, t)!,
       onDisabled: Color.lerp(onDisabled, other.onDisabled, t)!,
       primaryMuted: Color.lerp(primaryMuted, other.primaryMuted, t)!,
+      primarySubtle: Color.lerp(primarySubtle, other.primarySubtle, t)!,
       destructiveMuted: Color.lerp(destructiveMuted, other.destructiveMuted, t)!,
+      errorMuted: Color.lerp(errorMuted, other.errorMuted, t)!,
       successMuted: Color.lerp(successMuted, other.successMuted, t)!,
       warningMuted: Color.lerp(warningMuted, other.warningMuted, t)!,
       surfaceSecondary: Color.lerp(surfaceSecondary, other.surfaceSecondary, t)!,
       surfaceTertiary: Color.lerp(surfaceTertiary, other.surfaceTertiary, t)!,
+      textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
+      textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textTertiary: Color.lerp(textTertiary, other.textTertiary, t)!,
+      textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
+      textInverse: Color.lerp(textInverse, other.textInverse, t)!,
       overlay: Color.lerp(overlay, other.overlay, t)!,
+      scrim: Color.lerp(scrim, other.scrim, t)!,
       link: Color.lerp(link, other.link, t)!,
       focus: Color.lerp(focus, other.focus, t)!,
       separator: Color.lerp(separator, other.separator, t)!,

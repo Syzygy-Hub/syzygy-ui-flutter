@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-08-05
+
+### Changed (Breaking)
+- **Color token vocabulary alignment** — `AppColorsLight`, `AppColorsDark`, and `AppColors` updated to canonical token set:
+  - New tokens added: `primarySubtle`, `errorMuted`, `textPrimary`, `textSecondary`, `textDisabled`, `textInverse`, `scrim`
+  - All tokens wired through constructor required params, `copyWith`, `lerp`, `light`/`dark` static consts, and both inner color classes
+
+### Fixed
+- CI `release.yml`: `seq 1 10` → `seq 1 30` in pub.dev poll loop (300 s → 900 s max wait) to allow for slower registry propagation
+
 ## [2.2.1] - 2026-08-04
 
 ### Added

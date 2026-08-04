@@ -66,13 +66,13 @@ jobs:
       - name: Verify pub.dev publish
         run: |
           PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          for i in $(seq 1 10); do
+          for i in $(seq 1 30); do
             LATEST=$(curl -fsSL https://pub.dev/api/packages/syzygy_ui_flutter | jq -r '.latest.version' 2>/dev/null || echo "")
             if [ "$LATEST" = "$PKG_VERSION" ]; then
               echo "✅ pub.dev shows syzygy_ui_flutter@$PKG_VERSION"
               exit 0
             fi
-            echo "Attempt $i/10: pub.dev shows '$LATEST', expected '$PKG_VERSION' — waiting 10s for propagation..."
+            echo "Attempt $i/30: pub.dev shows '$LATEST', expected '$PKG_VERSION' — waiting 10s for propagation..."
             sleep 10
           done
           echo "::error::Publish verification failed — pub.dev never reported syzygy_ui_flutter@$PKG_VERSION"
@@ -86,7 +86,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${VERSION}" \
-            --title "v${VERSION}" \
+            --title "${VERSION}" \
             --notes "${{ github.event.workflow_run.head_commit.message }}" \
             --target ${{ github.event.workflow_run.head_branch }}
 
