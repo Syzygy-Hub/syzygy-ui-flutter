@@ -25,21 +25,19 @@ class Accordion extends StatefulWidget {
     super.key,
     required this.sections,
     this.allowMultipleOpen = false,
-    this.initiallyOpenIndex,
+    this.initiallyOpenIndexes = const {},
   });
 
   final List<AccordionSection> sections;
   final bool allowMultipleOpen;
-  final int? initiallyOpenIndex;
+  final Set<int> initiallyOpenIndexes;
 
   @override
   State<Accordion> createState() => _AccordionState();
 }
 
 class _AccordionState extends State<Accordion> {
-  late final Set<int> _openIndexes = widget.initiallyOpenIndex != null
-      ? {widget.initiallyOpenIndex!}
-      : <int>{};
+  late final Set<int> _openIndexes = Set<int>.from(widget.initiallyOpenIndexes);
 
   void _toggle(int index) {
     setState(() {

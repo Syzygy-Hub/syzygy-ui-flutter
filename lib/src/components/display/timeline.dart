@@ -8,8 +8,8 @@ import '../../tokens/spacing.dart';
 enum TimelineItemAlignment { leading, trailing }
 
 /// A single event in a [Timeline].
-class TimelineItemData {
-  const TimelineItemData({
+class TimelineItem {
+  const TimelineItem({
     required this.title,
     this.subtitle,
     this.timestamp,
@@ -40,7 +40,7 @@ class Timeline extends StatelessWidget {
     this.lineColor,
   });
 
-  final List<TimelineItemData> items;
+  final List<TimelineItem> items;
   final TimelineItemAlignment alignment;
   final Color? dotColor;
   final Color? lineColor;
@@ -86,7 +86,7 @@ class _TimelineRow extends StatelessWidget {
     required this.segmentHeight,
   });
 
-  final TimelineItemData item;
+  final TimelineItem item;
   final TimelineItemAlignment alignment;
   final Color dotColor;
   final Color lineColor;

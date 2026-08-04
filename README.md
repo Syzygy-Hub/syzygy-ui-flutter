@@ -47,6 +47,8 @@ Several components are named to avoid colliding with Flutter Material's own widg
 - **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*, AdaptiveStack, FlowLayout, StickyHeader, SafeAreaWrapper (themed wrapper around Flutter's own native `SafeArea`), LabeledDivider (wraps `DividerLine` with a centered/leading/trailing label)
 - **Transitions:** `NavigationTransitions.slideTransition`, `.crossFadeTransition`, `.slideVerticalTransition`, `.modalPresentationTransition`, `.scaleTransition`, `.fadeThroughTransition` — `PageRouteBuilder` factories
 
+**NetworkStatusBanner — cross-platform note**: On iOS and Android, `NetworkStatusBanner` self-detects connectivity via first-party OS APIs and requires no `isOffline` prop. On React Native and Flutter, real network detection requires a third-party package that this library deliberately does not bundle, so the banner is controlled/presentational — pass `isOffline` from your own network state.
+
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Design Tokens

@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-08-04
+
+### Added
+- `Timeline`: renamed `TimelineItemData` → `TimelineItem` — cross-platform naming alignment (breaking rename)
+- `Accordion`: `initiallyOpenIndex: int?` → `initiallyOpenIndexes: Set<int>` — lets callers pre-open multiple sections simultaneously (breaking rename; pass `{0}` to replicate the old single-index behaviour)
+
+### Fixed
+- `AppRadius.full`: corrected from `999.0` to `9999.0` to match cross-platform token spec
+- `ConfirmDialog`: wrapped content in `Semantics(liveRegion: true)` so TalkBack/VoiceOver announces the dialog on appearance
+
 ## [2.2.0] - 2026-08-04
 
 ### Added

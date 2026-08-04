@@ -25,7 +25,7 @@ void main() {
       expect(AppRadius.sm, 4.0);
       expect(AppRadius.md, 8.0);
       expect(AppRadius.lg, 16.0);
-      expect(AppRadius.full, 999.0);
+      expect(AppRadius.full, 9999.0);
     });
 
     test('light and dark color tokens exist and differ', () {
@@ -869,8 +869,8 @@ void main() {
       await tester.pumpWidget(_wrap(
         const Timeline(
           items: [
-            TimelineItemData(title: 'Order placed', subtitle: 'Processing', timestamp: '9:00 AM'),
-            TimelineItemData(title: 'Order shipped'),
+            TimelineItem(title: 'Order placed', subtitle: 'Processing', timestamp: '9:00 AM'),
+            TimelineItem(title: 'Order shipped'),
           ],
         ),
       ));

@@ -51,9 +51,11 @@ class ConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Semantics(
+      liveRegion: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: colors.onSurface)),
         const SizedBox(height: AppSpacing.sm),
@@ -77,6 +79,7 @@ class ConfirmDialog extends StatelessWidget {
           ],
         ),
       ],
+      ),
     );
   }
 }

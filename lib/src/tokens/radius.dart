@@ -10,5 +10,5 @@ class AppRadius {
   // semantic tokens (e.g. "large card" vs "extra-large sheet corner") that
   // happen to resolve to the same pixel value today — not a bug.
   static const double xl = 16.0;
-  static const double full = 999.0;
+  static const double full = 9999.0;
 }
