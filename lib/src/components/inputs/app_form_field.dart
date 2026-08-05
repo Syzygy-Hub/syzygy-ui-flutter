@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A generic composable wrapper: a [label] above an arbitrary [child]
 /// input slot, with an optional [error] message (shown in Material's error
@@ -17,16 +16,19 @@ class AppFormField extends StatelessWidget {
     required this.child,
     this.error,
     this.helperText,
-  });
+  
+    this.theme,});
 
   final String label;
   final Widget child;
   final String? error;
   final String? helperText;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final hasError = error != null && error!.isNotEmpty;
 
     return Column(
@@ -34,16 +36,16 @@ class AppFormField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.onSurface),
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: theme.colors.onSurface),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: theme.spacing.xs),
         child,
         if (hasError || (helperText != null && helperText!.isNotEmpty)) ...[
-          const SizedBox(height: AppSpacing.xxs),
+          SizedBox(height: theme.spacing.xxs),
           Text(
             hasError ? error! : helperText!,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: hasError ? colors.error : colors.textTertiary,
+                  color: hasError ? theme.colors.error : theme.colors.textTertiary,
                 ),
           ),
         ],

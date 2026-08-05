@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A labeled dropdown / picker, selecting from a fixed list of options.
 class Dropdown<T> extends StatelessWidget {
@@ -13,6 +11,7 @@ class Dropdown<T> extends StatelessWidget {
     required this.options,
     required this.onChanged,
     required this.optionTitle,
+    this.theme,
   });
 
   final String label;
@@ -20,19 +19,21 @@ class Dropdown<T> extends StatelessWidget {
   final List<T> options;
   final ValueChanged<T> onChanged;
   final String Function(T) optionTitle;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.onSurface),
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: theme.colors.onSurface),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: theme.spacing.xs),
         ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 48),
           child: DropdownButtonFormField<T>(
@@ -48,14 +49,14 @@ class Dropdown<T> extends StatelessWidget {
             },
             decoration: InputDecoration(
               filled: true,
-              fillColor: colors.surface,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
+              fillColor: theme.colors.surface,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: theme.spacing.md,
+                vertical: theme.spacing.sm,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: colors.border),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: theme.colors.border),
               ),
             ),
           ),

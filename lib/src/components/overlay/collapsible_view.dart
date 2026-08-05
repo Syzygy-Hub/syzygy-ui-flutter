@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// An expandable/collapsible section (accordion) with a tappable header.
 class CollapsibleView extends StatefulWidget {
@@ -10,12 +9,14 @@ class CollapsibleView extends StatefulWidget {
     required this.title,
     this.initiallyExpanded = false,
     required this.child,
-  });
+  
+    this.theme,});
 
   final String title;
   final bool initiallyExpanded;
   final Widget child;
 
+  final SyzygyTheme? theme;
   @override
   State<CollapsibleView> createState() => _CollapsibleViewState();
 }
@@ -25,7 +26,8 @@ class _CollapsibleViewState extends State<CollapsibleView> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,18 +40,18 @@ class _CollapsibleViewState extends State<CollapsibleView> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       widget.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: colors.onSurface),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: theme.colors.onSurface),
                     ),
                     AnimatedRotation(
                       turns: _expanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 200),
-                      child: Icon(Icons.expand_more, color: colors.secondary),
+                      child: Icon(Icons.expand_more, color: theme.colors.secondary),
                     ),
                   ],
                 ),
@@ -60,7 +62,7 @@ class _CollapsibleViewState extends State<CollapsibleView> {
         AnimatedCrossFade(
           firstChild: const SizedBox(width: double.infinity),
           secondChild: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+            padding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
             child: widget.child,
           ),
           crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,

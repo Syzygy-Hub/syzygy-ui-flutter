@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
 import '../../tokens/radius.dart';
 import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A labeled dropdown / picker with an inline search field for filtering
 /// the option list, selecting from a fixed list of options.
@@ -25,6 +25,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     required this.onChanged,
     required this.optionTitle,
     this.hintText = 'Search...',
+    this.theme,
   });
 
   final String label;
@@ -33,6 +34,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   final ValueChanged<T> onChanged;
   final String Function(T) optionTitle;
   final String hintText;
+  final SyzygyTheme? theme;
 
   @override
   State<SearchableDropdown<T>> createState() => _SearchableDropdownState<T>();
@@ -69,7 +71,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   void _open() {
     if (_entry != null) return;
-    final colors = AppColors.of(context);
+    final colors = SyzygyThemeProvider.of(context).colors;
 
     _entry = OverlayEntry(
       builder: (context) => Stack(
@@ -100,7 +102,10 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(AppSpacing.sm),
-                        child: TextField(
+                        child: Semantics(
+                          label: 'Search: ${widget.hintText}',
+                          textField: true,
+                          child: TextField(
                           controller: _searchController,
                           autofocus: true,
                           onChanged: _filter,
@@ -113,6 +118,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                             ),
                           ),
                         ),
+                        ),
                       ),
                       Flexible(
                         child: Material(
@@ -120,7 +126,10 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                           child: ListView(
                             shrinkWrap: true,
                             children: _filtered
-                                .map((option) => ListTile(
+                                .map((option) => Semantics(
+                                      label: widget.optionTitle(option),
+                                      button: true,
+                                      child: ListTile(
                                       dense: true,
                                       title: Text(widget.optionTitle(option)),
                                       selected: option == widget.value,
@@ -128,7 +137,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                                         widget.onChanged(option);
                                         _dismiss();
                                       },
-                                    ))
+                                    )))
                                 .toList(),
                           ),
                         ),
@@ -156,7 +165,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
 
     return CompositedTransformTarget(
       link: _link,
@@ -165,29 +175,29 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         children: [
           Text(
             widget.label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.onSurface),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: theme.colors.onSurface),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: theme.spacing.xs),
           InkWell(
             onTap: _open,
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
                 decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                  border: Border.all(color: colors.border),
+                  color: theme.colors.surface,
+                  borderRadius: BorderRadius.circular(theme.radius.md),
+                  border: Border.all(color: theme.colors.border),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
                         widget.value != null ? widget.optionTitle(widget.value as T) : widget.hintText,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.onSurface),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.onSurface),
                       ),
                     ),
-                    Icon(Icons.arrow_drop_down, color: colors.secondary),
+                    Icon(Icons.arrow_drop_down, color: theme.colors.secondary),
                   ],
                 ),
               ),

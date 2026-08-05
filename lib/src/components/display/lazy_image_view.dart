@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
 import '../feedback/shimmer_view.dart';
+import '../../theme/theme.dart';
 
 /// Asynchronously loads a remote image using Flutter's core [Image.network]
 /// (which handles async loading and caching natively — no third-party
@@ -12,17 +12,19 @@ class LazyImageView extends StatelessWidget {
     super.key,
     required this.url,
     this.fit = BoxFit.cover,
-  });
+  
+    this.theme,});
 
   final String? url;
   final BoxFit fit;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
 
     if (url == null || url!.isEmpty) {
-      return _fallback(colors);
+      return _fallback(theme);
     }
 
     return Image.network(
@@ -32,17 +34,17 @@ class LazyImageView extends StatelessWidget {
         if (progress == null) return child;
         return const ShimmerView();
       },
-      errorBuilder: (context, error, stackTrace) => _fallback(colors),
+      errorBuilder: (context, error, stackTrace) => _fallback(theme),
     );
   }
 
-  Widget _fallback(AppColors colors) {
+  Widget _fallback(SyzygyTheme theme) {
     return Semantics(
       label: 'Image failed to load',
       child: Container(
-        color: colors.surface,
+        color: theme.colors.surface,
         alignment: Alignment.center,
-        child: Icon(Icons.broken_image_outlined, color: colors.secondary),
+        child: Icon(Icons.broken_image_outlined, color: theme.colors.secondary),
       ),
     );
   }

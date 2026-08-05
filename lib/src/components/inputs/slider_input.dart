@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A labeled slider with a live value readout, wrapping Flutter Material's
 /// own [Slider]. Named `SliderInput` (not `Slider`) to avoid colliding with
@@ -15,7 +14,8 @@ class SliderInput extends StatelessWidget {
     this.min = 0,
     this.max = 1,
     this.divisions,
-  });
+  
+    this.theme,});
 
   final String label;
   final double value;
@@ -24,9 +24,11 @@ class SliderInput extends StatelessWidget {
   final double max;
   final int? divisions;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +40,7 @@ class SliderInput extends StatelessWidget {
             Text(value.toStringAsFixed(2), style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
-        const SizedBox(height: AppSpacing.xs),
+        SizedBox(height: theme.spacing.xs),
         Semantics(
           slider: true,
           label: label,
@@ -49,7 +51,7 @@ class SliderInput extends StatelessWidget {
             min: min,
             max: max,
             divisions: divisions,
-            activeColor: colors.primary,
+            activeColor: theme.colors.primary,
           ),
         ),
       ],

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A horizontal step-progress indicator: filled circle for completed steps,
 /// a ring for the active step, a dot for pending steps, connected by lines.
 /// Also known as `WizardSteps` in other parts of the Syzygy ecosystem.
 class StepIndicator extends StatelessWidget {
-  const StepIndicator({super.key, required this.steps, required this.currentStep});
+  const StepIndicator({super.key, required this.steps, required this.currentStep,
+    this.theme,});
 
   final List<String> steps;
   final int currentStep;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Row(
       children: List.generate(steps.length, (index) {
@@ -24,8 +27,8 @@ class StepIndicator extends StatelessWidget {
         if (isCompleted) {
           marker = CircleAvatar(
             radius: 10,
-            backgroundColor: colors.primary,
-            child: Icon(Icons.check, size: 12, color: colors.onPrimary),
+            backgroundColor: theme.colors.primary,
+            child: Icon(Icons.check, size: 12, color: theme.colors.onPrimary),
           );
         } else if (isActive) {
           marker = Container(
@@ -33,14 +36,14 @@ class StepIndicator extends StatelessWidget {
             height: 20,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: colors.primary, width: 2),
+              border: Border.all(color: theme.colors.primary, width: 2),
             ),
           );
         } else {
           marker = Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: colors.border),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: theme.colors.border),
           );
         }
 
@@ -58,7 +61,7 @@ class StepIndicator extends StatelessWidget {
                 Expanded(
                   child: Container(
                     height: 2,
-                    color: isCompleted ? colors.primary : colors.border,
+                    color: isCompleted ? theme.colors.primary : theme.colors.border,
                   ),
                 ),
             ],

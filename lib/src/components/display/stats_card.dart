@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Trend direction for [StatsCard].
 enum TrendDirection { up, down, neutral }
@@ -17,22 +15,25 @@ class StatsCard extends StatelessWidget {
     required this.value,
     this.trend,
     this.trendValue,
-  });
+  
+    this.theme,});
 
   final String label;
   final String value;
   final TrendDirection? trend;
   final String? trendValue;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     final trendColor = switch (trend) {
-      TrendDirection.up => colors.success,
-      TrendDirection.down => colors.error,
-      TrendDirection.neutral => colors.textTertiary,
-      null => colors.textTertiary,
+      TrendDirection.up => theme.colors.success,
+      TrendDirection.down => theme.colors.error,
+      TrendDirection.neutral => theme.colors.textTertiary,
+      null => theme.colors.textTertiary,
     };
     final trendIcon = switch (trend) {
       TrendDirection.up => Icons.arrow_upward,
@@ -42,26 +43,26 @@ class StatsCard extends StatelessWidget {
     };
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: EdgeInsets.all(theme.spacing.md),
       decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: colors.border),
+        color: theme.colors.surface,
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        border: Border.all(color: theme.colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.textTertiary)),
-          const SizedBox(height: AppSpacing.xxs),
-          Text(value, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: colors.onSurface)),
+          Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.textTertiary)),
+          SizedBox(height: theme.spacing.xxs),
+          Text(value, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: theme.colors.onSurface)),
           if (trend != null && trendValue != null) ...[
-            const SizedBox(height: AppSpacing.xxs),
+            SizedBox(height: theme.spacing.xxs),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(trendIcon, size: 14, color: trendColor),
-                const SizedBox(width: AppSpacing.xxs),
+                SizedBox(width: theme.spacing.xxs),
                 Text(trendValue!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: trendColor)),
               ],
             ),

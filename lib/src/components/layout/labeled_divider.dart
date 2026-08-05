@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import '../display/divider_line.dart';
+import '../../theme/theme.dart';
 
 /// Where the label sits along a [LabeledDivider].
 enum LabeledDividerAlignment { leading, center, trailing }
@@ -19,14 +18,17 @@ class LabeledDivider extends StatelessWidget {
     super.key,
     required this.label,
     this.alignment = LabeledDividerAlignment.center,
-  });
+  
+    this.theme,});
 
   final String label;
   final LabeledDividerAlignment alignment;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     final (leadingFlex, trailingFlex) = switch (alignment) {
       LabeledDividerAlignment.leading => (1, 4),
@@ -38,8 +40,8 @@ class LabeledDivider extends StatelessWidget {
       children: [
         Expanded(flex: leadingFlex, child: const DividerLine()),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          child: Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.textTertiary)),
+          padding: EdgeInsets.symmetric(horizontal: theme.spacing.sm),
+          child: Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.textTertiary)),
         ),
         Expanded(flex: trailingFlex, child: const DividerLine()),
       ],

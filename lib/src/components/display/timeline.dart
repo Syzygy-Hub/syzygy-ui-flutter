@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Where the dot/icon and connecting line sit relative to a [Timeline]
 /// item's content.
@@ -38,7 +37,8 @@ class Timeline extends StatelessWidget {
     this.alignment = TimelineItemAlignment.leading,
     this.dotColor,
     this.lineColor,
-  });
+  
+    this.theme,});
 
   final List<TimelineItem> items;
   final TimelineItemAlignment alignment;
@@ -49,11 +49,13 @@ class Timeline extends StatelessWidget {
   static const double _lineWidth = 2;
   static const double _segmentHeight = 32;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    final dot = dotColor ?? colors.primary;
-    final line = lineColor ?? colors.border;
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
+    final dot = dotColor ?? theme.colors.primary;
+    final line = lineColor ?? theme.colors.border;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -97,7 +99,8 @@ class _TimelineRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = SyzygyThemeProvider.of(context);
+
 
     final marker = Column(
       children: [
@@ -118,7 +121,7 @@ class _TimelineRow extends StatelessWidget {
     );
 
     final content = Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      padding: EdgeInsets.only(bottom: theme.spacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -126,16 +129,16 @@ class _TimelineRow extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(item.title, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: colors.onSurface)),
+              Text(item.title, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: theme.colors.onSurface)),
               if (item.timestamp != null) ...[
-                const SizedBox(width: AppSpacing.sm),
-                Text(item.timestamp!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.textTertiary)),
+                SizedBox(width: theme.spacing.sm),
+                Text(item.timestamp!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.textTertiary)),
               ],
             ],
           ),
           if (item.subtitle != null) ...[
-            const SizedBox(height: AppSpacing.xxs),
-            Text(item.subtitle!, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.textTertiary)),
+            SizedBox(height: theme.spacing.xxs),
+            Text(item.subtitle!, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.textTertiary)),
           ],
         ],
       ),
@@ -147,12 +150,12 @@ class _TimelineRow extends StatelessWidget {
         children: alignment == TimelineItemAlignment.leading
             ? [
                 marker,
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: theme.spacing.sm),
                 Expanded(child: content),
               ]
             : [
                 Expanded(child: content),
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: theme.spacing.sm),
                 marker,
               ],
       ),

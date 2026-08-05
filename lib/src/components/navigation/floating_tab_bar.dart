@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
 import 'tab_bar_item.dart';
+import '../../theme/theme.dart';
 
 /// A floating, pill-style bottom bar showing BOTH icon AND label per item.
 ///
@@ -18,23 +16,26 @@ class FloatingTabBar<T> extends StatelessWidget {
     required this.items,
     required this.selection,
     required this.onSelectionChange,
+    this.theme,
   });
 
   final List<TabBarItem<T>> items;
   final T selection;
   final ValueChanged<T> onSelectionChange;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+      padding: EdgeInsets.symmetric(horizontal: theme.spacing.sm, vertical: theme.spacing.xs),
       decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.full),
+        color: theme.colors.surface,
+        borderRadius: BorderRadius.circular(theme.radius.full),
         boxShadow: [
-          BoxShadow(color: colors.overlay, blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: theme.colors.overlay, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -47,18 +48,18 @@ class FloatingTabBar<T> extends StatelessWidget {
             label: item.label,
             child: InkWell(
               onTap: () => onSelectionChange(item.tag),
-              borderRadius: BorderRadius.circular(AppRadius.full),
+              borderRadius: BorderRadius.circular(theme.radius.full),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.sm, vertical: theme.spacing.xs),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(item.icon, color: selected ? colors.primary : colors.secondary, size: 20),
-                    const SizedBox(height: AppSpacing.xxs),
+                    Icon(item.icon, color: selected ? theme.colors.primary : theme.colors.secondary, size: 20),
+                    SizedBox(height: theme.spacing.xxs),
                     Text(
                       item.label,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: selected ? colors.primary : colors.secondary,
+                            color: selected ? theme.colors.primary : theme.colors.secondary,
                           ),
                     ),
                   ],

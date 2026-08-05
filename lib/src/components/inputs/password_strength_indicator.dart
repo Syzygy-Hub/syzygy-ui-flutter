@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 enum _Strength { weak, fair, strong, veryStrong }
 
@@ -10,7 +8,8 @@ enum _Strength { weak, fair, strong, veryStrong }
 /// and character-class variety, then renders a 4-segment strength bar plus
 /// a text label.
 class PasswordStrengthIndicator extends StatelessWidget {
-  const PasswordStrengthIndicator({super.key, required this.password});
+  const PasswordStrengthIndicator({super.key, required this.password,
+    this.theme,});
 
   final String password;
 
@@ -36,9 +35,11 @@ class PasswordStrengthIndicator extends StatelessWidget {
     return _Strength.veryStrong;
   }
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final strength = _strength;
     final filledSegments = switch (strength) {
       _Strength.weak => 1,
@@ -47,10 +48,10 @@ class PasswordStrengthIndicator extends StatelessWidget {
       _Strength.veryStrong => 4,
     };
     final color = switch (strength) {
-      _Strength.weak => colors.error,
-      _Strength.fair => colors.warning,
-      _Strength.strong => colors.success,
-      _Strength.veryStrong => colors.primary,
+      _Strength.weak => theme.colors.error,
+      _Strength.fair => theme.colors.warning,
+      _Strength.strong => theme.colors.success,
+      _Strength.veryStrong => theme.colors.primary,
     };
     final label = switch (strength) {
       _Strength.weak => 'Weak',
@@ -70,16 +71,16 @@ class PasswordStrengthIndicator extends StatelessWidget {
               return Expanded(
                 child: Container(
                   height: 4,
-                  margin: EdgeInsets.only(right: index == 3 ? 0 : AppSpacing.xxs),
+                  margin: EdgeInsets.only(right: index == 3 ? 0 : theme.spacing.xxs),
                   decoration: BoxDecoration(
-                    color: filled ? color : colors.border,
-                    borderRadius: BorderRadius.circular(AppRadius.xs),
+                    color: filled ? color : theme.colors.border,
+                    borderRadius: BorderRadius.circular(theme.radius.xs),
                   ),
                 ),
               );
             }),
           ),
-          const SizedBox(height: AppSpacing.xxs),
+          SizedBox(height: theme.spacing.xxs),
           Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color)),
         ],
       ),

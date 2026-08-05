@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A single labeled radio option. Compose several with shared parent state
 /// to build a radio group. Named `RadioButtonInput` for cross-platform
@@ -23,16 +23,19 @@ class RadioButtonInput<T> extends StatelessWidget {
     required this.value,
     required this.groupValue,
     required this.onChanged,
+    this.theme,
   });
 
   final String label;
   final T value;
   final T groupValue;
   final ValueChanged<T> onChanged;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final selected = value == groupValue;
 
     return Semantics(
@@ -48,7 +51,7 @@ class RadioButtonInput<T> extends StatelessWidget {
               onChanged: (v) => onChanged(v as T),
               child: Radio<T>(
                 value: value,
-                activeColor: colors.primary,
+                activeColor: theme.colors.primary,
               ),
             ),
             Text(label, style: Theme.of(context).textTheme.bodyMedium),

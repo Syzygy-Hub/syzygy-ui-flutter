@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A row of dots indicating the current page position, syncing with
 /// [PagerView]'s `onPageChanged` callback. Also known as `DotIndicator`
@@ -20,18 +19,21 @@ class PageControl extends StatelessWidget {
     required this.currentPage,
     this.activeColor,
     this.inactiveColor,
-  });
+  
+    this.theme,});
 
   final int pageCount;
   final int currentPage;
   final Color? activeColor;
   final Color? inactiveColor;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    final active = activeColor ?? colors.primary;
-    final inactive = inactiveColor ?? colors.disabled;
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
+    final active = activeColor ?? theme.colors.primary;
+    final inactive = inactiveColor ?? theme.colors.disabled;
 
     return Semantics(
       label: 'Page ${currentPage + 1} of $pageCount',
@@ -40,7 +42,7 @@ class PageControl extends StatelessWidget {
         children: List.generate(pageCount, (index) {
           final isActive = index == currentPage;
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
+            padding: EdgeInsets.symmetric(horizontal: theme.spacing.xxs),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               width: isActive ? 10 : 6,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/theme.dart';
 
 /// Swipeable, paged content — e.g. onboarding screens or an image carousel.
 /// Distinct from `TabBar`, which is navigation chrome; this has no chrome of
@@ -10,12 +11,14 @@ class PagerView extends StatelessWidget {
     required this.children,
     this.controller,
     this.onPageChanged,
-  });
+  
+    this.theme,});
 
   final List<Widget> children;
   final PageController? controller;
   final ValueChanged<int>? onPageChanged;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
     return PageView(

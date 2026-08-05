@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// A consistent back-navigation button, defaulting to [Navigator.pop].
 class AppBackButton extends StatelessWidget {
@@ -10,15 +9,18 @@ class AppBackButton extends StatelessWidget {
     this.onPressed,
     this.style,
     this.semanticLabel = 'Back',
-  });
+  
+    this.theme,});
 
   final VoidCallback? onPressed;
   final ButtonStyle? style;
   final String semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       button: true,
@@ -30,11 +32,11 @@ class AppBackButton extends StatelessWidget {
           onPressed: onPressed ?? () => Navigator.of(context).maybePop(),
           tooltip: semanticLabel,
           icon: const Icon(Icons.arrow_back),
-          color: colors.onSurface,
+          color: theme.colors.onSurface,
           style: style ??
               IconButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.full),
+                  borderRadius: BorderRadius.circular(theme.radius.full),
                 ),
               ),
         ),

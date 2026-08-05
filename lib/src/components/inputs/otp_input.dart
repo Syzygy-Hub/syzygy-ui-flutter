@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A row of [length] fixed single-character boxes for OTP/PIN entry, with
 /// auto-advancing focus as each digit is entered.
@@ -13,12 +11,14 @@ class OTPInput extends StatefulWidget {
     this.length = 6,
     required this.code,
     required this.onCodeChange,
-  });
+  
+    this.theme,});
 
   final int length;
   final String code;
   final ValueChanged<String> onCodeChange;
 
+  final SyzygyTheme? theme;
   @override
   State<OTPInput> createState() => _OTPInputState();
 }
@@ -60,7 +60,8 @@ class _OTPInputState extends State<OTPInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: 'One-time passcode entry, ${widget.length} digits',
@@ -68,7 +69,7 @@ class _OTPInputState extends State<OTPInput> {
         mainAxisSize: MainAxisSize.min,
         children: List.generate(widget.length, (index) {
           return Padding(
-            padding: EdgeInsets.only(right: index == widget.length - 1 ? 0 : AppSpacing.xs),
+            padding: EdgeInsets.only(right: index == widget.length - 1 ? 0 : theme.spacing.xs),
             child: SizedBox(
               width: 44,
               height: 52,
@@ -83,14 +84,14 @@ class _OTPInputState extends State<OTPInput> {
                 decoration: InputDecoration(
                   counterText: '',
                   filled: true,
-                  fillColor: colors.surface,
+                  fillColor: theme.colors.surface,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    borderSide: BorderSide(color: colors.border),
+                    borderRadius: BorderRadius.circular(theme.radius.md),
+                    borderSide: BorderSide(color: theme.colors.border),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    borderSide: BorderSide(color: colors.primary, width: 2),
+                    borderRadius: BorderRadius.circular(theme.radius.md),
+                    borderSide: BorderSide(color: theme.colors.primary, width: 2),
                   ),
                 ),
                 onChanged: (value) => _handleChanged(index, value),

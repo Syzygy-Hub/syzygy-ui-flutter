@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Semantic variants for [ToastView].
 enum ToastVariant { success, warning, error }
@@ -14,7 +12,8 @@ class ToastView extends StatelessWidget {
     required this.message,
     required this.variant,
     this.decoration,
-  });
+  
+    this.theme,});
 
   final String message;
   final ToastVariant variant;
@@ -26,7 +25,7 @@ class ToastView extends StatelessWidget {
     ToastVariant variant = ToastVariant.success,
     Duration duration = const Duration(seconds: 3),
   }) {
-    final colors = AppColors.of(context);
+    final colors = SyzygyThemeProvider.of(context).colors;
     final backgroundColor = _backgroundFor(variant, colors);
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -36,13 +35,13 @@ class ToastView extends StatelessWidget {
         duration: duration,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(SyzygyThemeProvider.of(context).radius.md),
         ),
       ),
     );
   }
 
-  static Color _backgroundFor(ToastVariant variant, AppColors colors) {
+  static Color _backgroundFor(ToastVariant variant, SyzygyColors colors) {
     switch (variant) {
       case ToastVariant.success:
         return colors.success;
@@ -64,13 +63,15 @@ class ToastView extends StatelessWidget {
     }
   }
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final foreground = switch (variant) {
-      ToastVariant.success => colors.onSuccess,
-      ToastVariant.warning => colors.onWarning,
-      ToastVariant.error => colors.onError,
+      ToastVariant.success => theme.colors.onSuccess,
+      ToastVariant.warning => theme.colors.onWarning,
+      ToastVariant.error => theme.colors.onError,
     };
 
     return Semantics(
@@ -82,7 +83,7 @@ class ToastView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(_icon, color: foreground, size: 20),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: theme.spacing.sm),
             Flexible(
               child: Text(
                 message,

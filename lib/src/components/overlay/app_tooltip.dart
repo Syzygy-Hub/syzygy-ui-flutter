@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart' hide Tooltip;
 import 'package:flutter/material.dart' as material show Tooltip;
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// A themed wrapper around Flutter Material's own `Tooltip`, which already
 /// natively handles hover (desktop/web) and long-press (mobile) display —
@@ -10,22 +9,25 @@ import '../../tokens/radius.dart';
 /// colliding with Material's own `Tooltip`, the same naming-collision-
 /// avoidance convention already used by `AppIconButton`/`AppBackButton`.
 class AppTooltip extends StatelessWidget {
-  const AppTooltip({super.key, required this.message, required this.child});
+  const AppTooltip({super.key, required this.message, required this.child,
+    this.theme,});
 
   final String message;
   final Widget child;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return material.Tooltip(
       message: message,
       decoration: BoxDecoration(
-        color: colors.onSurface,
-        borderRadius: BorderRadius.circular(AppRadius.sm),
+        color: theme.colors.onSurface,
+        borderRadius: BorderRadius.circular(theme.radius.sm),
       ),
-      textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.surface),
+      textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.surface),
       child: child,
     );
   }

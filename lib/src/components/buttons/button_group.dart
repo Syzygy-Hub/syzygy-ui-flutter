@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A horizontal segmented row of buttons, supporting single-select
 /// (default) or multi-select via [multiSelect]. [selection] is always a
@@ -15,7 +13,8 @@ class ButtonGroup extends StatelessWidget {
     required this.selection,
     required this.onSelectionChange,
     this.multiSelect = false,
-  });
+  
+    this.theme,});
 
   final List<String> options;
   final List<int> selection;
@@ -36,15 +35,17 @@ class ButtonGroup extends StatelessWidget {
     }
   }
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.xxs),
+      padding: EdgeInsets.all(theme.spacing.xxs),
       decoration: BoxDecoration(
-        color: colors.surfaceSecondary,
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        color: theme.colors.surfaceSecondary,
+        borderRadius: BorderRadius.circular(theme.radius.md),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -56,20 +57,20 @@ class ButtonGroup extends StatelessWidget {
             label: options[index],
             child: InkWell(
               onTap: () => _handleTap(index),
-              borderRadius: BorderRadius.circular(AppRadius.sm),
+              borderRadius: BorderRadius.circular(theme.radius.sm),
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
+                padding: EdgeInsets.symmetric(
+                  horizontal: theme.spacing.md,
+                  vertical: theme.spacing.sm,
                 ),
                 decoration: BoxDecoration(
-                  color: selected ? colors.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  color: selected ? theme.colors.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(theme.radius.sm),
                 ),
                 child: Text(
                   options[index],
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: selected ? colors.onPrimary : colors.onSurface,
+                        color: selected ? theme.colors.onPrimary : theme.colors.onSurface,
                       ),
                 ),
               ),

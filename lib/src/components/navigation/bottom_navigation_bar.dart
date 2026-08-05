@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart' hide BottomNavigationBar;
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import 'tab_bar_item.dart';
+import '../../theme/theme.dart';
 
 /// A floating, icon-only bottom navigation pill — a visual alternative to
 /// `TabBar` for screens that want a compact, inset navigation surface.
@@ -14,19 +13,22 @@ class BottomNavigationBar<T> extends StatelessWidget {
     required this.items,
     required this.selection,
     required this.onSelectionChanged,
+    this.theme,
   });
 
   final List<TabBarItem<T>> items;
   final T selection;
   final ValueChanged<T> onSelectionChanged;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      decoration: BoxDecoration(color: colors.surface, borderRadius: BorderRadius.circular(999)),
+      padding: EdgeInsets.all(theme.spacing.xs),
+      decoration: BoxDecoration(color: theme.colors.surface, borderRadius: BorderRadius.circular(999)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: items.map((item) {
@@ -43,10 +45,10 @@ class BottomNavigationBar<T> extends StatelessWidget {
                 height: 44,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: selected ? colors.primary : Colors.transparent,
+                  color: selected ? theme.colors.primary : Colors.transparent,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(item.icon, color: selected ? colors.onPrimary : colors.secondary),
+                child: Icon(item.icon, color: selected ? theme.colors.onPrimary : theme.colors.secondary),
               ),
             ),
           );

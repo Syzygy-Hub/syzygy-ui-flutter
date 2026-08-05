@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A labeled multi-line text field, matching [TextInput]'s visual style but
 /// backed by Flutter's own `minLines`/`maxLines` `TextField` params.
@@ -17,7 +15,8 @@ class TextArea extends StatelessWidget {
     this.maxLines = 6,
     this.enabled = true,
     this.onChanged,
-  });
+  
+    this.theme,});
 
   final String label;
   final TextEditingController? controller;
@@ -28,9 +27,11 @@ class TextArea extends StatelessWidget {
   final bool enabled;
   final ValueChanged<String>? onChanged;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final hasError = errorText != null && errorText!.isNotEmpty;
 
     return Semantics(
@@ -44,9 +45,9 @@ class TextArea extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .labelLarge
-                ?.copyWith(color: colors.onSurface),
+                ?.copyWith(color: theme.colors.onSurface),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: theme.spacing.xs),
           TextFormField(
             controller: controller,
             enabled: enabled,
@@ -58,26 +59,26 @@ class TextArea extends StatelessWidget {
               hintText: hintText,
               errorText: errorText,
               filled: true,
-              fillColor: colors.surface,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
+              fillColor: theme.colors.surface,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: theme.spacing.md,
+                vertical: theme.spacing.sm,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: colors.border),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: theme.colors.border),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: hasError ? colors.error : colors.border),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: hasError ? theme.colors.error : theme.colors.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: hasError ? colors.error : colors.primary, width: 2),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: hasError ? theme.colors.error : theme.colors.primary, width: 2),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: colors.error),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: theme.colors.error),
               ),
             ),
           ),

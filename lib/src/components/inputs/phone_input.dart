@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A single selectable country entry for [PhoneInput].
 class PhoneCountry {
@@ -62,13 +60,15 @@ class PhoneInput extends StatefulWidget {
     this.initialCountry,
     this.countries = kDefaultPhoneCountries,
     this.onChanged,
-  });
+  
+    this.theme,});
 
   final String? label;
   final PhoneCountry? initialCountry;
   final List<PhoneCountry> countries;
   final ValueChanged<PhoneNumberValue>? onChanged;
 
+  final SyzygyTheme? theme;
   @override
   State<PhoneInput> createState() => _PhoneInputState();
 }
@@ -89,7 +89,7 @@ class _PhoneInputState extends State<PhoneInput> {
   }
 
   Future<void> _pickCountry() async {
-    final colors = AppColors.of(context);
+    final colors = SyzygyThemeProvider.of(context).colors;
     final selected = await showModalBottomSheet<PhoneCountry>(
       context: context,
       backgroundColor: colors.surface,
@@ -115,14 +115,17 @@ class _PhoneInputState extends State<PhoneInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
 
-    return Column(
+
+    return Semantics(
+      label: 'Phone number input',
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != null) ...[
-          Text(widget.label!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.onSurface)),
-          const SizedBox(height: AppSpacing.xs),
+          Text(widget.label!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: theme.colors.onSurface)),
+          SizedBox(height: theme.spacing.xs),
         ],
         ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 48),
@@ -131,30 +134,31 @@ class _PhoneInputState extends State<PhoneInput> {
               InkWell(
                 onTap: _pickCountry,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+                  padding: EdgeInsets.symmetric(horizontal: theme.spacing.sm, vertical: theme.spacing.sm),
                   decoration: BoxDecoration(
-                    color: colors.surface,
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    border: Border.all(color: colors.border),
+                    color: theme.colors.surface,
+                    borderRadius: BorderRadius.circular(theme.radius.md),
+                    border: Border.all(color: theme.colors.border),
                   ),
-                  child: Text(_country.label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.onSurface)),
+                  child: Text(_country.label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.onSurface)),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              SizedBox(width: theme.spacing.sm),
               Expanded(
                 child: TextField(
                   controller: _controller,
                   keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d\s\-()]'))],
                   onChanged: (_) => _emit(),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: colors.surface,
+                    fillColor: theme.colors.surface,
                     hintText: 'Phone number',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+                    contentPadding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: colors.border),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
+                      borderSide: BorderSide(color: theme.colors.border),
                     ),
                   ),
                 ),
@@ -163,6 +167,7 @@ class _PhoneInputState extends State<PhoneInput> {
           ),
         ),
       ],
+      ),
     );
   }
 }

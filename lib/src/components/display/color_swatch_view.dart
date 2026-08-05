@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide ColorSwatch;
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Shape variant for [ColorSwatchView].
 enum ColorSwatchShape { circle, square }
@@ -24,7 +23,8 @@ class ColorSwatchView extends StatelessWidget {
     this.label,
     this.isSelected = false,
     this.size = 32,
-  });
+  
+    this.theme,});
 
   final Color color;
   final ColorSwatchShape shape;
@@ -32,9 +32,11 @@ class ColorSwatchView extends StatelessWidget {
   final bool isSelected;
   final double size;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     final swatch = Container(
       width: size,
@@ -43,7 +45,7 @@ class ColorSwatchView extends StatelessWidget {
         color: color,
         shape: shape == ColorSwatchShape.circle ? BoxShape.circle : BoxShape.rectangle,
         borderRadius: shape == ColorSwatchShape.square ? BorderRadius.circular(4) : null,
-        border: isSelected ? Border.all(color: colors.focus, width: 2) : null,
+        border: isSelected ? Border.all(color: theme.colors.focus, width: 2) : null,
       ),
     );
 
@@ -55,8 +57,8 @@ class ColorSwatchView extends StatelessWidget {
         children: [
           swatch,
           if (label != null) ...[
-            const SizedBox(height: AppSpacing.xxs),
-            Text(label!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.textTertiary)),
+            SizedBox(height: theme.spacing.xxs),
+            Text(label!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.textTertiary)),
           ],
         ],
       ),

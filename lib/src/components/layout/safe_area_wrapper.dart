@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/theme.dart';
 
 /// A themed, opinionated wrapper around Flutter's own [SafeArea].
 ///
@@ -19,7 +20,8 @@ class SafeAreaWrapper extends StatelessWidget {
     this.bottom = true,
     this.left = true,
     this.right = true,
-  });
+  
+    this.theme,});
 
   final Widget child;
   final bool top;
@@ -27,6 +29,7 @@ class SafeAreaWrapper extends StatelessWidget {
   final bool left;
   final bool right;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

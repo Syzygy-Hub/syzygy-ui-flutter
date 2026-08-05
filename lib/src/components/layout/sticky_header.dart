@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/theme.dart';
 
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   _StickyHeaderDelegate({required this.child, required this.height});
@@ -33,12 +34,14 @@ class StickyHeader extends StatelessWidget {
     required this.header,
     required this.child,
     this.headerHeight = kToolbarHeight,
-  });
+  
+    this.theme,});
 
   final Widget header;
   final Widget child;
   final double headerHeight;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

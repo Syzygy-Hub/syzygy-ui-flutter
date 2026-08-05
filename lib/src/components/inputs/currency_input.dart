@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Where the currency symbol renders relative to the numeric value.
 enum CurrencySymbolPosition { prefix, suffix }
@@ -31,7 +29,8 @@ class CurrencyInput extends StatefulWidget {
     this.symbolPosition = CurrencySymbolPosition.prefix,
     this.decimalDigits = 2,
     this.onChanged,
-  });
+  
+    this.theme,});
 
   final String? label;
   final TextEditingController? controller;
@@ -59,6 +58,7 @@ class CurrencyInput extends StatefulWidget {
     return buffer.toString();
   }
 
+  final SyzygyTheme? theme;
   @override
   State<CurrencyInput> createState() => _CurrencyInputState();
 }
@@ -79,18 +79,19 @@ class _CurrencyInputState extends State<CurrencyInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
     final symbolText = Text(
       widget.currencySymbol,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.textTertiary),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.textTertiary),
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != null) ...[
-          Text(widget.label!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: colors.onSurface)),
-          const SizedBox(height: AppSpacing.xs),
+          Text(widget.label!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: theme.colors.onSurface)),
+          SizedBox(height: theme.spacing.xs),
         ],
         ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 48),
@@ -101,19 +102,19 @@ class _CurrencyInputState extends State<CurrencyInput> {
             onChanged: _handleChanged,
             decoration: InputDecoration(
               filled: true,
-              fillColor: colors.surface,
+              fillColor: theme.colors.surface,
               prefixIcon: widget.symbolPosition == CurrencySymbolPosition.prefix
-                  ? Padding(padding: const EdgeInsets.only(left: AppSpacing.md), child: symbolText)
+                  ? Padding(padding: EdgeInsets.only(left: theme.spacing.md), child: symbolText)
                   : null,
               prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
               suffixIcon: widget.symbolPosition == CurrencySymbolPosition.suffix
-                  ? Padding(padding: const EdgeInsets.only(right: AppSpacing.md), child: symbolText)
+                  ? Padding(padding: EdgeInsets.only(right: theme.spacing.md), child: symbolText)
                   : null,
               suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+              contentPadding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: colors.border),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                borderSide: BorderSide(color: theme.colors.border),
               ),
             ),
           ),

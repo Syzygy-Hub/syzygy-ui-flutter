@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide TabBar;
 
-import '../../tokens/colors.dart';
 import 'tab_bar_item.dart';
+import '../../theme/theme.dart';
 
 /// An edge-to-edge, icon-and-label tab bar. Presentational only — pass
 /// [selection]/[onSelectionChanged] rather than a `TabController`. Hides
@@ -13,27 +13,30 @@ class TabBar<T> extends StatelessWidget {
     required this.items,
     required this.selection,
     required this.onSelectionChanged,
+    this.theme,
   });
 
   final List<TabBarItem<T>> items;
   final T selection;
   final ValueChanged<T> onSelectionChanged;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border(top: BorderSide(color: colors.border)),
+        color: theme.colors.surface,
+        border: Border(top: BorderSide(color: theme.colors.border)),
       ),
       child: SafeArea(
         top: false,
         child: Row(
           children: items.map((item) {
             final selected = item.tag == selection;
-            final color = selected ? colors.primary : colors.secondary;
+            final color = selected ? theme.colors.primary : theme.colors.secondary;
             return Expanded(
               child: Semantics(
                 button: true,

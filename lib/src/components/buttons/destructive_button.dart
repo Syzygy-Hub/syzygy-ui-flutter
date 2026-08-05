@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A filled button that signals a destructive or irreversible action,
 /// such as delete or remove.
@@ -15,7 +13,8 @@ class DestructiveButton extends StatelessWidget {
     this.isLoading = false,
     this.style,
     this.semanticLabel,
-  });
+  
+    this.theme,});
 
   final String label;
   final VoidCallback? onPressed;
@@ -24,9 +23,11 @@ class DestructiveButton extends StatelessWidget {
   final ButtonStyle? style;
   final String? semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final disabled = onPressed == null || isLoading;
 
     return Semantics(
@@ -34,29 +35,29 @@ class DestructiveButton extends StatelessWidget {
       enabled: !disabled,
       label: semanticLabel ?? label,
       child: SizedBox(
-        height: AppSpacing.xxl,
+        height: theme.spacing.xxl,
         child: ElevatedButton(
           onPressed: disabled ? null : onPressed,
           style: style ??
               ElevatedButton.styleFrom(
-                backgroundColor: colors.destructive,
-                foregroundColor: colors.onDestructive,
-                disabledBackgroundColor: colors.disabled,
-                disabledForegroundColor: colors.onDisabled,
+                backgroundColor: theme.colors.destructive,
+                foregroundColor: theme.colors.onDestructive,
+                disabledBackgroundColor: theme.colors.disabled,
+                disabledForegroundColor: theme.colors.onDisabled,
                 minimumSize: const Size(48, 48),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderRadius: BorderRadius.circular(theme.radius.md),
                 ),
               ),
           child: isLoading
               ? SizedBox(
-                  height: AppSpacing.md,
-                  width: AppSpacing.md,
+                  height: theme.spacing.md,
+                  width: theme.spacing.md,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(colors.onDestructive),
+                        AlwaysStoppedAnimation<Color>(theme.colors.onDestructive),
                   ),
                 )
               : Row(
@@ -64,7 +65,7 @@ class DestructiveButton extends StatelessWidget {
                   children: [
                     if (icon != null) ...[
                       Icon(icon, size: 18),
-                      const SizedBox(width: AppSpacing.sm),
+                      SizedBox(width: theme.spacing.sm),
                     ],
                     Text(label),
                   ],

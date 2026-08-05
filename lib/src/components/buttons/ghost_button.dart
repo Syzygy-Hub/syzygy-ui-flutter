@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A low-emphasis, text-only button with no fill or border.
 class GhostButton extends StatelessWidget {
@@ -13,7 +11,8 @@ class GhostButton extends StatelessWidget {
     this.icon,
     this.style,
     this.semanticLabel,
-  });
+  
+    this.theme,});
 
   final String label;
   final VoidCallback? onPressed;
@@ -21,9 +20,11 @@ class GhostButton extends StatelessWidget {
   final ButtonStyle? style;
   final String? semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final disabled = onPressed == null;
 
     return Semantics(
@@ -31,17 +32,17 @@ class GhostButton extends StatelessWidget {
       enabled: !disabled,
       label: semanticLabel ?? label,
       child: SizedBox(
-        height: AppSpacing.xxl,
+        height: theme.spacing.xxl,
         child: TextButton(
           onPressed: onPressed,
           style: style ??
               TextButton.styleFrom(
-                foregroundColor: colors.primary,
-                disabledForegroundColor: colors.onDisabled,
+                foregroundColor: theme.colors.primary,
+                disabledForegroundColor: theme.colors.onDisabled,
                 minimumSize: const Size(48, 48),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderRadius: BorderRadius.circular(theme.radius.md),
                 ),
               ),
           child: Row(
@@ -49,7 +50,7 @@ class GhostButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 18),
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: theme.spacing.sm),
               ],
               Text(label),
             ],

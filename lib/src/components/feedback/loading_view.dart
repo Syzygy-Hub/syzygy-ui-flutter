@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A centered loading indicator with an optional status message.
 class LoadingView extends StatelessWidget {
@@ -9,14 +8,17 @@ class LoadingView extends StatelessWidget {
     super.key,
     this.message,
     this.decoration,
-  });
+  
+    this.theme,});
 
   final String? message;
   final BoxDecoration? decoration;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: message ?? 'Loading',
@@ -27,14 +29,14 @@ class LoadingView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(theme.colors.primary),
             ),
             if (message != null) ...[
-              const SizedBox(height: AppSpacing.md),
+              SizedBox(height: theme.spacing.md),
               Text(
                 message!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors.onSurface,
+                      color: theme.colors.onSurface,
                     ),
                 textAlign: TextAlign.center,
               ),

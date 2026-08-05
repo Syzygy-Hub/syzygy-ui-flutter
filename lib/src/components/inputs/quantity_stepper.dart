@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// A +/- quantity control, bounded to [min]/[max].
 class QuantityStepper extends StatelessWidget {
@@ -12,7 +11,8 @@ class QuantityStepper extends StatelessWidget {
     this.min = 0,
     this.max = 99,
     this.step = 1,
-  });
+  
+    this.theme,});
 
   final int value;
   final ValueChanged<int> onChanged;
@@ -20,9 +20,11 @@ class QuantityStepper extends StatelessWidget {
   final int max;
   final int step;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final atMin = value <= min;
     final atMax = value >= max;
 
@@ -30,8 +32,8 @@ class QuantityStepper extends StatelessWidget {
       label: 'Quantity: $value',
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: colors.border),
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(color: theme.colors.border),
+          borderRadius: BorderRadius.circular(theme.radius.md),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -40,7 +42,7 @@ class QuantityStepper extends StatelessWidget {
               tooltip: 'Decrease',
               onPressed: atMin ? null : () => onChanged((value - step).clamp(min, max)),
               icon: const Icon(Icons.remove),
-              color: colors.primary,
+              color: theme.colors.primary,
             ),
             SizedBox(
               width: 24,
@@ -50,7 +52,7 @@ class QuantityStepper extends StatelessWidget {
               tooltip: 'Increase',
               onPressed: atMax ? null : () => onChanged((value + step).clamp(min, max)),
               icon: const Icon(Icons.add),
-              color: colors.primary,
+              color: theme.colors.primary,
             ),
           ],
         ),

@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A search field with a leading icon, trailing clear button, and built-in
 /// debounce. Named `SearchInput` (not `SearchBar`) to avoid colliding with
@@ -18,7 +16,8 @@ class SearchInput extends StatefulWidget {
     this.onChanged,
     this.onSearchTextChanged,
     this.debounce = const Duration(milliseconds: 300),
-  });
+  
+    this.theme,});
 
   final TextEditingController? controller;
   final String hintText;
@@ -26,6 +25,7 @@ class SearchInput extends StatefulWidget {
   final ValueChanged<String>? onSearchTextChanged;
   final Duration debounce;
 
+  final SyzygyTheme? theme;
   @override
   State<SearchInput> createState() => _SearchInputState();
 }
@@ -51,7 +51,8 @@ class _SearchInputState extends State<SearchInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 48),
@@ -62,7 +63,7 @@ class _SearchInputState extends State<SearchInput> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           filled: true,
-          fillColor: colors.surface,
+          fillColor: theme.colors.surface,
           prefixIcon: const Icon(Icons.search),
           suffixIcon: ValueListenableBuilder<TextEditingValue>(
             valueListenable: _controller,
@@ -81,13 +82,13 @@ class _SearchInputState extends State<SearchInput> {
               );
             },
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: theme.spacing.md,
+            vertical: theme.spacing.sm,
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            borderSide: BorderSide(color: colors.border),
+            borderRadius: BorderRadius.circular(theme.radius.md),
+            borderSide: BorderSide(color: theme.colors.border),
           ),
         ),
       ),

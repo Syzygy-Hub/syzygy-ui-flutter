@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A single section within an [Accordion].
 class AccordionSection {
@@ -26,12 +25,14 @@ class Accordion extends StatefulWidget {
     required this.sections,
     this.allowMultipleOpen = false,
     this.initiallyOpenIndexes = const {},
-  });
+  
+    this.theme,});
 
   final List<AccordionSection> sections;
   final bool allowMultipleOpen;
   final Set<int> initiallyOpenIndexes;
 
+  final SyzygyTheme? theme;
   @override
   State<Accordion> createState() => _AccordionState();
 }
@@ -58,13 +59,14 @@ class _AccordionState extends State<Accordion> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < widget.sections.length; i++) ...[
-          if (i > 0) Divider(height: 1, thickness: 1, color: colors.border),
+          if (i > 0) Divider(height: 1, thickness: 1, color: theme.colors.border),
           _AccordionSectionView(
             section: widget.sections[i],
             expanded: _openIndexes.contains(i),
@@ -89,7 +91,8 @@ class _AccordionSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = SyzygyThemeProvider.of(context);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,18 +105,18 @@ class _AccordionSectionView extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       section.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: colors.onSurface),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: theme.colors.onSurface),
                     ),
                     AnimatedRotation(
                       turns: expanded ? 0.5 : 0,
                       duration: const Duration(milliseconds: 200),
-                      child: Icon(Icons.expand_more, color: colors.secondary),
+                      child: Icon(Icons.expand_more, color: theme.colors.secondary),
                     ),
                   ],
                 ),
@@ -124,7 +127,7 @@ class _AccordionSectionView extends StatelessWidget {
         AnimatedCrossFade(
           firstChild: const SizedBox(width: double.infinity),
           secondChild: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+            padding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
             child: section.child,
           ),
           crossFadeState: expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,

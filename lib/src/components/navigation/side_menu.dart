@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Drawer;
 import 'package:flutter/material.dart' as material show Drawer;
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A themed slide-in side menu panel, also known as `Drawer` in other parts
 /// of the Syzygy ecosystem.
@@ -15,16 +15,19 @@ import '../../tokens/colors.dart';
 /// already gets right) for no real design benefit, since this library's
 /// customization needs here are purely cosmetic (colors/typography).
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key, required this.child});
+  const SideMenu({super.key, required this.child,
+    this.theme,});
 
   final Widget child;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return material.Drawer(
-      backgroundColor: colors.surface,
+      backgroundColor: theme.colors.surface,
       child: child,
     );
   }

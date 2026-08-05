@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A single tappable label in a [Breadcrumbs] trail.
 class BreadcrumbItem {
@@ -14,22 +14,25 @@ class BreadcrumbItem {
 /// A horizontal trail of tappable navigation labels separated by a
 /// separator glyph, using the [AppColors.separator] color token.
 class Breadcrumbs extends StatelessWidget {
-  const Breadcrumbs({super.key, required this.items});
+  const Breadcrumbs({super.key, required this.items,
+    this.theme,});
 
   final List<BreadcrumbItem> items;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < items.length; i++) ...[
           if (i > 0) ...[
-            const SizedBox(width: AppSpacing.xxs),
-            Text('/', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.separator)),
-            const SizedBox(width: AppSpacing.xxs),
+            SizedBox(width: theme.spacing.xxs),
+            Text('/', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.separator)),
+            SizedBox(width: theme.spacing.xxs),
           ],
           Semantics(
             button: items[i].onTap != null,
@@ -39,7 +42,7 @@ class Breadcrumbs extends StatelessWidget {
               child: Text(
                 items[i].label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: items[i].onTap != null ? colors.link : colors.textTertiary,
+                      color: items[i].onTap != null ? theme.colors.link : theme.colors.textTertiary,
                     ),
               ),
             ),

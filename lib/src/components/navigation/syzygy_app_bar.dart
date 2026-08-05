@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A top navigation bar with a centered title and optional leading/trailing
 /// accessories. Implements [PreferredSizeWidget] so it can be dropped
@@ -13,25 +13,28 @@ import '../../tokens/colors.dart';
 /// for their own screens, so forcing a hide on every file that imports both
 /// this package and Material would be too disruptive.
 class SyzygyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const SyzygyAppBar({super.key, required this.title, this.leading, this.actions});
+  const SyzygyAppBar({super.key, required this.title, this.leading, this.actions,
+    this.theme,});
 
   final String title;
   final Widget? leading;
   final List<Widget>? actions;
 
+  final SyzygyTheme? theme;
   @override
   Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       header: true,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: colors.surface,
-          border: Border(bottom: BorderSide(color: colors.border)),
+          color: theme.colors.surface,
+          border: Border(bottom: BorderSide(color: theme.colors.border)),
         ),
         child: SafeArea(
           bottom: false,
@@ -41,7 +44,7 @@ class SyzygyAppBar extends StatelessWidget implements PreferredSizeWidget {
               leading: leading,
               middle: Text(
                 title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: colors.onSurface),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: theme.colors.onSurface),
               ),
               trailing: actions == null ? null : Row(mainAxisSize: MainAxisSize.min, children: actions!),
               centerMiddle: true,

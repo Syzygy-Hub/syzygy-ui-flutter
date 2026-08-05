@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import '../buttons/primary_button.dart';
+import '../../theme/theme.dart';
 
 /// An icon, title, subtitle, and retry action for error states. Mirrors
 /// [EmptyStateView]'s structure with a destructive-tinted icon and a
@@ -15,7 +14,8 @@ class ErrorStateView extends StatelessWidget {
     this.retryLabel = 'Retry',
     required this.onRetryPressed,
     this.icon = Icons.error_outline,
-  });
+  
+    this.theme,});
 
   final String title;
   final String? subtitle;
@@ -23,33 +23,35 @@ class ErrorStateView extends StatelessWidget {
   final VoidCallback onRetryPressed;
   final IconData icon;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: subtitle == null ? title : '$title. $subtitle',
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: EdgeInsets.all(theme.spacing.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 48, color: colors.destructive),
-            const SizedBox(height: AppSpacing.md),
+            Icon(icon, size: 48, color: theme.colors.destructive),
+            SizedBox(height: theme.spacing.md),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: colors.onSurface),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: theme.colors.onSurface),
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: AppSpacing.xs),
+              SizedBox(height: theme.spacing.xs),
               Text(
                 subtitle!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.secondary),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.secondary),
                 textAlign: TextAlign.center,
               ),
             ],
-            const SizedBox(height: AppSpacing.lg),
+            SizedBox(height: theme.spacing.lg),
             PrimaryButton(label: retryLabel, onPressed: onRetryPressed),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A button with a built-in loading spinner that replaces the label while
 /// [isLoading] is true, and is disabled for the duration.
@@ -11,29 +10,32 @@ class LoadingButton extends StatelessWidget {
     required this.label,
     required this.isLoading,
     required this.onPressed,
-  });
+  
+    this.theme,});
 
   final String label;
   final bool isLoading;
   final VoidCallback onPressed;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: colors.primary,
-        foregroundColor: colors.onPrimary,
+        backgroundColor: theme.colors.primary,
+        foregroundColor: theme.colors.onPrimary,
       ),
       child: isLoading
           ? SizedBox(
-              width: AppSpacing.md,
-              height: AppSpacing.md,
+              width: theme.spacing.md,
+              height: theme.spacing.md,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(colors.onPrimary),
+                valueColor: AlwaysStoppedAnimation<Color>(theme.colors.onPrimary),
               ),
             )
           : Text(label),

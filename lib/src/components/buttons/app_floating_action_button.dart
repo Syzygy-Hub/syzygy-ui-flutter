@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A themed floating action button. Named `AppFloatingActionButton` (not
 /// `FloatingActionButton`) to avoid colliding with Flutter Material's own
@@ -12,20 +12,23 @@ class AppFloatingActionButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.semanticLabel,
-  });
+  
+    this.theme,});
 
   final IconData icon;
   final VoidCallback onPressed;
   final String? semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return FloatingActionButton(
       onPressed: onPressed,
-      backgroundColor: colors.primary,
-      foregroundColor: colors.onPrimary,
+      backgroundColor: theme.colors.primary,
+      foregroundColor: theme.colors.onPrimary,
       tooltip: semanticLabel,
       child: Icon(icon),
     );

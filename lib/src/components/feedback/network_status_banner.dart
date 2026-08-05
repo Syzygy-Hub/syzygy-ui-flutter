@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Where [NetworkStatusBanner] anchors within its parent.
 enum NetworkBannerPosition { top, bottom }
@@ -28,7 +27,8 @@ class NetworkStatusBanner extends StatelessWidget {
     this.manualOverride,
     this.position = NetworkBannerPosition.top,
     this.message = 'No internet connection',
-  });
+  
+    this.theme,});
 
   /// Whether the device is currently offline. The consumer is responsible
   /// for sourcing this (this widget performs no connectivity detection).
@@ -41,25 +41,27 @@ class NetworkStatusBanner extends StatelessWidget {
   final NetworkBannerPosition position;
   final String message;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final visible = manualOverride ?? isOffline;
 
     final banner = Material(
-      color: colors.destructive,
+      color: theme.colors.destructive,
       child: SafeArea(
         top: position == NetworkBannerPosition.top,
         bottom: position == NetworkBannerPosition.bottom,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+          padding: EdgeInsets.symmetric(horizontal: theme.spacing.md, vertical: theme.spacing.sm),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.wifi_off, color: colors.onDestructive, size: 16),
-              const SizedBox(width: AppSpacing.xs),
-              Text(message, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.onDestructive)),
+              Icon(Icons.wifi_off, color: theme.colors.onDestructive, size: 16),
+              SizedBox(width: theme.spacing.xs),
+              Text(message, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: theme.colors.onDestructive)),
             ],
           ),
         ),

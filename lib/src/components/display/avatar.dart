@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// Size options for [Avatar].
 enum AvatarSize { small, medium, large }
@@ -19,14 +19,17 @@ class Avatar extends StatelessWidget {
     super.key,
     required this.initials,
     this.size = AvatarSize.medium,
-  });
+  
+    this.theme,});
 
   final String initials;
   final AvatarSize size;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: initials,
@@ -34,10 +37,10 @@ class Avatar extends StatelessWidget {
         width: size.dimension,
         height: size.dimension,
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: colors.primary, shape: BoxShape.circle),
+        decoration: BoxDecoration(color: theme.colors.primary, shape: BoxShape.circle),
         child: Text(
           initials,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: colors.onPrimary),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: theme.colors.onPrimary),
         ),
       ),
     );

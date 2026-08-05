@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A medium-emphasis outlined button, typically paired with a
 /// [PrimaryButton] for secondary actions.
@@ -14,7 +12,8 @@ class SecondaryButton extends StatelessWidget {
     this.icon,
     this.style,
     this.semanticLabel,
-  });
+  
+    this.theme,});
 
   final String label;
   final VoidCallback? onPressed;
@@ -22,9 +21,11 @@ class SecondaryButton extends StatelessWidget {
   final ButtonStyle? style;
   final String? semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final disabled = onPressed == null;
 
     return Semantics(
@@ -32,20 +33,20 @@ class SecondaryButton extends StatelessWidget {
       enabled: !disabled,
       label: semanticLabel ?? label,
       child: SizedBox(
-        height: AppSpacing.xxl,
+        height: theme.spacing.xxl,
         child: OutlinedButton(
           onPressed: onPressed,
           style: style ??
               OutlinedButton.styleFrom(
-                foregroundColor: colors.primary,
-                disabledForegroundColor: colors.onDisabled,
+                foregroundColor: theme.colors.primary,
+                disabledForegroundColor: theme.colors.onDisabled,
                 side: BorderSide(
-                  color: disabled ? colors.disabled : colors.primary,
+                  color: disabled ? theme.colors.disabled : theme.colors.primary,
                 ),
                 minimumSize: const Size(48, 48),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: EdgeInsets.symmetric(horizontal: theme.spacing.md),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  borderRadius: BorderRadius.circular(theme.radius.md),
                 ),
               ),
           child: Row(
@@ -53,7 +54,7 @@ class SecondaryButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 18),
-                const SizedBox(width: AppSpacing.sm),
+                SizedBox(width: theme.spacing.sm),
               ],
               Text(label),
             ],

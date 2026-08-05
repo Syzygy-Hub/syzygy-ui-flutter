@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' hide SnackBar;
 import 'package:flutter/material.dart' as material show SnackBar;
 
-import '../../tokens/colors.dart';
 import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// A themed, opinionated `SnackBar`-building factory.
 ///
@@ -22,7 +22,7 @@ class AppSnackbar {
     String? actionLabel,
     VoidCallback? onAction,
   }) {
-    final colors = AppColors.of(context);
+    final colors = SyzygyThemeProvider.of(context).colors;
 
     return material.SnackBar(
       content: Text(message, style: TextStyle(color: colors.onSurface)),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A labeled text field with optional error state and character counter.
 class TextInput extends StatelessWidget {
@@ -18,7 +16,8 @@ class TextInput extends StatelessWidget {
     this.enabled = true,
     this.onChanged,
     this.decoration,
-  });
+  
+    this.theme,});
 
   final String label;
   final TextEditingController? controller;
@@ -31,9 +30,11 @@ class TextInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final InputDecoration? decoration;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final hasError = errorText != null && errorText!.isNotEmpty;
 
     return Semantics(
@@ -45,10 +46,10 @@ class TextInput extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colors.onSurface,
+                  color: theme.colors.onSurface,
                 ),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: theme.spacing.xs),
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 48),
             child: TextFormField(
@@ -72,7 +73,7 @@ class TextInput extends StatelessWidget {
                         child: Text(
                           '$currentLength/$maxLength',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: colors.secondary,
+                                color: theme.colors.secondary,
                               ),
                         ),
                       );
@@ -82,31 +83,31 @@ class TextInput extends StatelessWidget {
                     hintText: hintText,
                     errorText: errorText,
                     filled: true,
-                    fillColor: colors.surface,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
+                    fillColor: theme.colors.surface,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: theme.spacing.md,
+                      vertical: theme.spacing.sm,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: colors.border),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
+                      borderSide: BorderSide(color: theme.colors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
                       borderSide: BorderSide(
-                        color: hasError ? colors.error : colors.border,
+                        color: hasError ? theme.colors.error : theme.colors.border,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
                       borderSide: BorderSide(
-                        color: hasError ? colors.error : colors.primary,
+                        color: hasError ? theme.colors.error : theme.colors.primary,
                         width: 2,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: colors.error),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
+                      borderSide: BorderSide(color: theme.colors.error),
                     ),
                   ),
             ),

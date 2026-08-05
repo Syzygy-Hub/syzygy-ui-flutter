@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import '../overlay/modal_dialog.dart';
+import '../../theme/theme.dart';
 
 /// A preset modal variant of [ModalDialog]: title, message, confirm button,
 /// cancel button — the common "are you sure?" pattern, built on top of
@@ -16,7 +15,8 @@ class ConfirmDialog extends StatelessWidget {
     this.confirmLabel = 'Confirm',
     this.cancelLabel = 'Cancel',
     this.isDestructive = false,
-  });
+  
+    this.theme,});
 
   final String title;
   final String message;
@@ -47,9 +47,11 @@ class ConfirmDialog extends StatelessWidget {
     return result ?? false;
   }
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       liveRegion: true,
@@ -57,10 +59,10 @@ class ConfirmDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: colors.onSurface)),
-        const SizedBox(height: AppSpacing.sm),
-        Text(message, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.textTertiary)),
-        const SizedBox(height: AppSpacing.lg),
+        Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: theme.colors.onSurface)),
+        SizedBox(height: theme.spacing.sm),
+        Text(message, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: theme.colors.textTertiary)),
+        SizedBox(height: theme.spacing.lg),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -68,11 +70,11 @@ class ConfirmDialog extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelLabel),
             ),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: theme.spacing.sm),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: TextButton.styleFrom(
-                foregroundColor: isDestructive ? colors.error : colors.primary,
+                foregroundColor: isDestructive ? theme.colors.error : theme.colors.primary,
               ),
               child: Text(confirmLabel),
             ),

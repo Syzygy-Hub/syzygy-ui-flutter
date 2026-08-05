@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart' hide BottomSheet;
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import 'bottom_sheet.dart';
+import '../../theme/theme.dart';
 
 /// A single action listed in an [ActionSheet].
 class ActionSheetItem {
@@ -17,7 +16,8 @@ class ActionSheetItem {
 /// `showModalBottomSheet`-wrapping, static `.show(context, ...)` convenience
 /// convention already used by [BottomSheet].
 class ActionSheet extends StatelessWidget {
-  const ActionSheet({super.key, required this.actions});
+  const ActionSheet({super.key, required this.actions,
+    this.theme,});
 
   final List<ActionSheetItem> actions;
 
@@ -28,9 +28,11 @@ class ActionSheet extends StatelessWidget {
     );
   }
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -45,11 +47,11 @@ class ActionSheet extends StatelessWidget {
                 action.onTap();
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                padding: EdgeInsets.symmetric(vertical: theme.spacing.sm),
                 child: Text(
                   action.label,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: action.isDestructive ? colors.error : colors.onSurface,
+                        color: action.isDestructive ? theme.colors.error : theme.colors.onSurface,
                       ),
                 ),
               ),

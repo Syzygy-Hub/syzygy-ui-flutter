@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-08-05
+
+### Added
+- SyzygyTheme, SyzygyThemeProvider InheritedWidget, runtime theme switching via builder callback
+- 3 built-in themes: defaultTheme, dark, highContrast
+- Component-level theme override via theme constructor parameter
+
+### Changed
+- All components now read visual tokens from SyzygyThemeProvider.of(context)
+
+### Fixed
+- Accessibility: PhoneInput (Semantics label), SearchableDropdown (field + items), Popover (container)
+
 ## [2.3.0] - 2026-08-05
 
 ### Changed (Breaking)

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
 import 'avatar.dart';
+import '../../theme/theme.dart';
 
 /// An overlapping stack of up to [max] [Avatar]s, with a "+N" overflow
 /// circle if [avatars] has more entries than [max].
@@ -11,7 +11,8 @@ class AvatarGroup extends StatelessWidget {
     required this.avatars,
     this.max = 4,
     this.size = AvatarSize.medium,
-  });
+  
+    this.theme,});
 
   final List<String> avatars;
   final int max;
@@ -23,9 +24,11 @@ class AvatarGroup extends StatelessWidget {
         AvatarSize.large => 64,
       };
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final visible = avatars.take(max).toList();
     final overflow = avatars.length - visible.length;
     final overlap = _dimension * 0.6;
@@ -41,7 +44,7 @@ class AvatarGroup extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: colors.surface, width: 2),
+                  border: Border.all(color: theme.colors.surface, width: 2),
                 ),
                 child: Avatar(initials: visible[i], size: size),
               ),
@@ -55,12 +58,12 @@ class AvatarGroup extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: colors.surfaceTertiary,
-                  border: Border.all(color: colors.surface, width: 2),
+                  color: theme.colors.surfaceTertiary,
+                  border: Border.all(color: theme.colors.surface, width: 2),
                 ),
                 child: Text(
                   '+$overflow',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: colors.onSurface),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: theme.colors.onSurface),
                 ),
               ),
             ),

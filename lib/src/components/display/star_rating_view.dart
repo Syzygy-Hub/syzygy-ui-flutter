@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A star rating display. Pass [onRatingChanged] to make it interactively
 /// tappable; omit it for a read-only display.
@@ -10,15 +10,18 @@ class StarRatingView extends StatelessWidget {
     required this.rating,
     this.maxRating = 5,
     this.onRatingChanged,
-  });
+  
+    this.theme,});
 
   final int rating;
   final int maxRating;
   final ValueChanged<int>? onRatingChanged;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: 'Rating: $rating out of $maxRating stars',
@@ -29,7 +32,7 @@ class StarRatingView extends StatelessWidget {
           final filled = star <= rating;
           final icon = Icon(
             filled ? Icons.star : Icons.star_border,
-            color: filled ? colors.warning : colors.secondary,
+            color: filled ? theme.colors.warning : theme.colors.secondary,
           );
 
           if (onRatingChanged == null) return icon;

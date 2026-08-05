@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import '../../theme/theme.dart';
 
 /// A layout that arranges [children] horizontally (in a [Row]) above
 /// [breakpoint] available width, and vertically (in a [Column]) below it.
 /// Uses [LayoutBuilder], Flutter's own mechanism for reading available
 /// constraints, to decide which to render.
 class AdaptiveStack extends StatelessWidget {
-  const AdaptiveStack({super.key, required this.breakpoint, required this.children});
+  const AdaptiveStack({super.key, required this.breakpoint, required this.children,
+    this.theme,});
 
   final double breakpoint;
   final List<Widget> children;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
 import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A generic container card using token-driven surface color and radius.
 class CardView extends StatelessWidget {
@@ -13,7 +12,8 @@ class CardView extends StatelessWidget {
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.decoration,
     this.semanticLabel,
-  });
+  
+    this.theme,});
 
   final Widget child;
   final VoidCallback? onTap;
@@ -21,17 +21,19 @@ class CardView extends StatelessWidget {
   final BoxDecoration? decoration;
   final String? semanticLabel;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     final content = Container(
       padding: padding,
       decoration: decoration ??
           BoxDecoration(
-            color: colors.surface,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(color: colors.border),
+            color: theme.colors.surface,
+            borderRadius: BorderRadius.circular(theme.radius.lg),
+            border: Border.all(color: theme.colors.border),
           ),
       child: child,
     );
@@ -49,10 +51,10 @@ class CardView extends StatelessWidget {
       label: semanticLabel,
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+        borderRadius: BorderRadius.circular(theme.radius.lg),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderRadius: BorderRadius.circular(theme.radius.lg),
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 48),
             child: content,

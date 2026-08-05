@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/spacing.dart';
 import '../buttons/primary_button.dart';
+import '../../theme/theme.dart';
 
 /// A placeholder view for empty lists or missing content, with an
 /// optional call-to-action button.
@@ -15,7 +14,8 @@ class EmptyStateView extends StatelessWidget {
     this.ctaLabel,
     this.onCtaPressed,
     this.decoration,
-  });
+  
+    this.theme,});
 
   final IconData icon;
   final String title;
@@ -24,40 +24,42 @@ class EmptyStateView extends StatelessWidget {
   final VoidCallback? onCtaPressed;
   final BoxDecoration? decoration;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       label: subtitle == null ? title : '$title. $subtitle',
       child: Container(
         decoration: decoration,
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: EdgeInsets.all(theme.spacing.lg),
         alignment: Alignment.center,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 48, color: colors.secondary),
-            const SizedBox(height: AppSpacing.md),
+            Icon(icon, size: 48, color: theme.colors.secondary),
+            SizedBox(height: theme.spacing.md),
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: colors.onSurface,
+                    color: theme.colors.onSurface,
                   ),
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: AppSpacing.xs),
+              SizedBox(height: theme.spacing.xs),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors.secondary,
+                      color: theme.colors.secondary,
                     ),
                 textAlign: TextAlign.center,
               ),
             ],
             if (ctaLabel != null && onCtaPressed != null) ...[
-              const SizedBox(height: AppSpacing.lg),
+              SizedBox(height: theme.spacing.lg),
               PrimaryButton(label: ctaLabel!, onPressed: onCtaPressed),
             ],
           ],

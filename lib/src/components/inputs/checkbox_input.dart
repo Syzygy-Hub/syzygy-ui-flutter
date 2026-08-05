@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// A labeled checkbox. Named `CheckboxInput` (not `Checkbox`) to avoid
 /// colliding with Flutter Material's own [Checkbox].
@@ -10,15 +10,18 @@ class CheckboxInput extends StatelessWidget {
     required this.label,
     required this.value,
     required this.onChanged,
-  });
+  
+    this.theme,});
 
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return Semantics(
       checked: value,
@@ -28,7 +31,7 @@ class CheckboxInput extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Checkbox(value: value, onChanged: (v) => onChanged(v ?? false), activeColor: colors.primary),
+            Checkbox(value: value, onChanged: (v) => onChanged(v ?? false), activeColor: theme.colors.primary),
             Text(label, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),

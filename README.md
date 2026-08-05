@@ -22,7 +22,7 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  syzygy_ui_flutter: ^2.2.0
+  syzygy_ui_flutter: ^2.4.0
 ```
 
 Then run:
@@ -194,6 +194,76 @@ See the [Components](#components) list above for everything else available.
 - Patch: `v1.0.1` — bug fixes
 - Minor: `v1.1.0` — new components
 - Major: `v2.0.0` — breaking changes
+
+## Theming
+
+Syzygy UI 2.4.0 ships a runtime theming system built on `InheritedWidget`. The token files in `lib/src/tokens/` are unchanged; `SyzygyTheme` is the new injection layer.
+
+### Wrapping with SyzygyThemeProvider
+
+Place `SyzygyThemeProvider` inside `MaterialApp` as a child (not a parent), so `BuildContext` and `Scaffold` are available:
+
+```dart
+MaterialApp(
+  theme: AppTheme.light(),
+  darkTheme: AppTheme.dark(),
+  home: SyzygyThemeProvider(
+    theme: SyzygyTheme.defaultTheme,
+    builder: (context, setTheme) => MyHomePage(setTheme: setTheme),
+  ),
+)
+```
+
+### Accessing the theme
+
+In any widget that is a descendant of `SyzygyThemeProvider`, call:
+
+```dart
+final theme = SyzygyThemeProvider.of(context);
+
+// Use semantic tokens:
+theme.colors.primary
+theme.radius.md
+theme.spacing.lg
+theme.typography.headline
+theme.elevation.sm
+theme.animation.duration.normal
+```
+
+If no provider is in the tree, `SyzygyThemeProvider.of` returns `SyzygyTheme.defaultTheme` — no null checks needed.
+
+### Component-level theme override
+
+Every component accepts an optional `theme` constructor parameter. When supplied it takes precedence over the inherited theme, allowing per-widget overrides without touching the tree:
+
+```dart
+PrimaryButton(
+  label: 'High Contrast Action',
+  onPressed: () {},
+  theme: SyzygyTheme.highContrast,
+)
+```
+
+### Built-in themes
+
+| Constant | Description |
+|---|---|
+| `SyzygyTheme.defaultTheme` | Light palette, standard radius and typography |
+| `SyzygyTheme.dark` | Dark palette tuned for OLED screens |
+| `SyzygyTheme.highContrast` | High-contrast palette, sharp (zero) radius, heavier weights |
+
+### Runtime theme switching
+
+The `builder` callback provides a `setTheme` function you can store and call from anywhere:
+
+```dart
+SyzygyThemeProvider(
+  builder: (context, setTheme) => ElevatedButton(
+    onPressed: () => setTheme(SyzygyTheme.dark),
+    child: const Text('Switch to Dark'),
+  ),
+)
+```
 
 ## License
 MIT

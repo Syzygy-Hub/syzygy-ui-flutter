@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// A password input field with a show/hide visibility toggle.
 class SecureInput extends StatefulWidget {
@@ -15,7 +13,8 @@ class SecureInput extends StatefulWidget {
     this.enabled = true,
     this.onChanged,
     this.decoration,
-  });
+  
+    this.theme,});
 
   final String label;
   final TextEditingController? controller;
@@ -25,6 +24,7 @@ class SecureInput extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final InputDecoration? decoration;
 
+  final SyzygyTheme? theme;
   @override
   State<SecureInput> createState() => _SecureInputState();
 }
@@ -34,7 +34,8 @@ class _SecureInputState extends State<SecureInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
     final hasError = widget.errorText != null && widget.errorText!.isNotEmpty;
 
     return Semantics(
@@ -46,10 +47,10 @@ class _SecureInputState extends State<SecureInput> {
           Text(
             widget.label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colors.onSurface,
+                  color: theme.colors.onSurface,
                 ),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          SizedBox(height: theme.spacing.xs),
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 48),
             child: TextFormField(
@@ -63,10 +64,10 @@ class _SecureInputState extends State<SecureInput> {
                     hintText: widget.hintText,
                     errorText: widget.errorText,
                     filled: true,
-                    fillColor: colors.surface,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
+                    fillColor: theme.colors.surface,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: theme.spacing.md,
+                      vertical: theme.spacing.sm,
                     ),
                     suffixIcon: Semantics(
                       button: true,
@@ -87,25 +88,25 @@ class _SecureInputState extends State<SecureInput> {
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: colors.border),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
+                      borderSide: BorderSide(color: theme.colors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
                       borderSide: BorderSide(
-                        color: hasError ? colors.error : colors.border,
+                        color: hasError ? theme.colors.error : theme.colors.border,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
                       borderSide: BorderSide(
-                        color: hasError ? colors.error : colors.primary,
+                        color: hasError ? theme.colors.error : theme.colors.primary,
                         width: 2,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                      borderSide: BorderSide(color: colors.error),
+                      borderRadius: BorderRadius.circular(theme.radius.md),
+                      borderSide: BorderSide(color: theme.colors.error),
                     ),
                   ),
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// A tappable icon-only button with a minimum 48dp touch target.
 class AppIconButton extends StatelessWidget {
@@ -12,7 +11,8 @@ class AppIconButton extends StatelessWidget {
     required this.semanticLabel,
     this.color,
     this.style,
-  });
+  
+    this.theme,});
 
   final IconData icon;
   final VoidCallback? onPressed;
@@ -22,9 +22,11 @@ class AppIconButton extends StatelessWidget {
   final Color? color;
   final ButtonStyle? style;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
     final disabled = onPressed == null;
 
     return Semantics(
@@ -38,11 +40,11 @@ class AppIconButton extends StatelessWidget {
           onPressed: onPressed,
           tooltip: semanticLabel,
           icon: Icon(icon),
-          color: color ?? (disabled ? colors.onDisabled : colors.onSurface),
+          color: color ?? (disabled ? theme.colors.onDisabled : theme.colors.onSurface),
           style: style ??
               IconButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.full),
+                  borderRadius: BorderRadius.circular(theme.radius.full),
                 ),
               ),
         ),

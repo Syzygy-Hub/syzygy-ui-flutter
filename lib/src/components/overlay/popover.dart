@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
 import '../../tokens/radius.dart';
 import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// An anchored floating content bubble, triggered by tapping [child].
 ///
@@ -12,11 +12,13 @@ import '../../tokens/spacing.dart';
 /// primitive — this widget uses that (via an [OverlayEntry]) rather than
 /// reimplementing anchor positioning math by hand.
 class Popover extends StatefulWidget {
-  const Popover({super.key, required this.child, required this.content});
+  const Popover({super.key, required this.child, required this.content,
+    this.theme,});
 
   final Widget child;
   final Widget content;
 
+  final SyzygyTheme? theme;
   @override
   State<Popover> createState() => _PopoverState();
 }
@@ -34,7 +36,7 @@ class _PopoverState extends State<Popover> {
   }
 
   void _show() {
-    final colors = AppColors.of(context);
+    final colors = SyzygyThemeProvider.of(context).colors;
     _entry = OverlayEntry(
       builder: (context) => Stack(
         children: [
@@ -51,7 +53,10 @@ class _PopoverState extends State<Popover> {
             targetAnchor: Alignment.bottomLeft,
             child: Material(
               color: Colors.transparent,
-              child: Container(
+              child: Semantics(
+                label: 'Popover',
+                container: true,
+                child: Container(
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
                   color: colors.surface,
@@ -59,6 +64,7 @@ class _PopoverState extends State<Popover> {
                   border: Border.all(color: colors.border),
                 ),
                 child: widget.content,
+              ),
               ),
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
+import '../../theme/theme.dart';
 
 /// An inline, single-row segmented picker for switching between a small set
 /// of content states — distinct from `TabBar`/`BottomNavigationBar`, which
@@ -12,16 +12,19 @@ class SegmentedControl<T> extends StatelessWidget {
     required this.selection,
     required this.onChanged,
     required this.optionTitle,
+    this.theme,
   });
 
   final List<T> options;
   final T selection;
   final ValueChanged<T> onChanged;
   final String Function(T) optionTitle;
+  final SyzygyTheme? theme;
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     return SegmentedButton<T>(
       segments: options
@@ -30,8 +33,8 @@ class SegmentedControl<T> extends StatelessWidget {
       selected: {selection},
       onSelectionChanged: (values) => onChanged(values.first),
       style: SegmentedButton.styleFrom(
-        selectedBackgroundColor: colors.primary,
-        selectedForegroundColor: colors.onPrimary,
+        selectedBackgroundColor: theme.colors.primary,
+        selectedForegroundColor: theme.colors.onPrimary,
       ),
     );
   }

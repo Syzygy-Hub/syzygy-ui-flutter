@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
+import '../../theme/theme.dart';
 
 /// Shape options for [SkeletonView].
 enum SkeletonShape { rectangle, circle }
@@ -17,13 +16,15 @@ class SkeletonView extends StatefulWidget {
     this.width,
     this.height = 16,
     this.borderRadius,
-  });
+  
+    this.theme,});
 
   final SkeletonShape shape;
   final double? width;
   final double height;
   final double? borderRadius;
 
+  final SyzygyTheme? theme;
   @override
   State<SkeletonView> createState() => _SkeletonViewState();
 }
@@ -42,7 +43,8 @@ class _SkeletonViewState extends State<SkeletonView> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = widget.theme ?? SyzygyThemeProvider.of(context);
+
     final isCircle = widget.shape == SkeletonShape.circle;
 
     return ExcludeSemantics(
@@ -53,11 +55,11 @@ class _SkeletonViewState extends State<SkeletonView> with SingleTickerProviderSt
             width: widget.width ?? (isCircle ? widget.height : null),
             height: widget.height,
             decoration: BoxDecoration(
-              color: colors.border.withValues(alpha: 0.3 + _controller.value * 0.4),
+              color: theme.colors.border.withValues(alpha: 0.3 + _controller.value * 0.4),
               shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
               borderRadius: isCircle
                   ? null
-                  : BorderRadius.circular(widget.borderRadius ?? AppRadius.sm),
+                  : BorderRadius.circular(widget.borderRadius ?? theme.radius.sm),
             ),
           );
         },

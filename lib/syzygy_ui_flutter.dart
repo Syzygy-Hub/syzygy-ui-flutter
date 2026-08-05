@@ -2,6 +2,9 @@
 /// Dark Mode, and zero third-party dependencies.
 library;
 
+// Theme
+export 'src/theme/theme.dart';
+
 // Tokens
 export 'src/tokens/colors.dart';
 export 'src/tokens/typography.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../tokens/colors.dart';
-import '../../tokens/radius.dart';
-import '../../tokens/spacing.dart';
+import '../../theme/theme.dart';
 
 /// Variant styling for [InlineAlert].
 enum AlertVariant { info, success, warning, error }
@@ -15,35 +13,38 @@ enum AlertVariant { info, success, warning, error }
 /// `ScaffoldMessenger`-queued overlay, not an inline widget), and this
 /// avoids colliding with either.
 class InlineAlert extends StatelessWidget {
-  const InlineAlert({super.key, required this.message, required this.variant});
+  const InlineAlert({super.key, required this.message, required this.variant,
+    this.theme,});
 
   final String message;
   final AlertVariant variant;
 
+  final SyzygyTheme? theme;
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final theme = this.theme ?? SyzygyThemeProvider.of(context);
+
 
     final (background, foreground, icon) = switch (variant) {
-      AlertVariant.info => (colors.primaryMuted, colors.primary, Icons.info_outline),
-      AlertVariant.success => (colors.successMuted, colors.success, Icons.check_circle_outline),
-      AlertVariant.warning => (colors.warningMuted, colors.warning, Icons.warning_amber_outlined),
-      AlertVariant.error => (colors.destructiveMuted, colors.error, Icons.error_outline),
+      AlertVariant.info => (theme.colors.primaryMuted, theme.colors.primary, Icons.info_outline),
+      AlertVariant.success => (theme.colors.successMuted, theme.colors.success, Icons.check_circle_outline),
+      AlertVariant.warning => (theme.colors.warningMuted, theme.colors.warning, Icons.warning_amber_outlined),
+      AlertVariant.error => (theme.colors.destructiveMuted, theme.colors.error, Icons.error_outline),
     };
 
     return Semantics(
       liveRegion: true,
       label: message,
       child: Container(
-        padding: const EdgeInsets.all(AppSpacing.sm),
+        padding: EdgeInsets.all(theme.spacing.sm),
         decoration: BoxDecoration(
           color: background,
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(theme.radius.md),
         ),
         child: Row(
           children: [
             Icon(icon, color: foreground, size: 20),
-            const SizedBox(width: AppSpacing.sm),
+            SizedBox(width: theme.spacing.sm),
             Expanded(
               child: Text(message, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: foreground)),
             ),
