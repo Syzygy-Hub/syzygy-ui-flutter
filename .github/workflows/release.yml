@@ -1,96 +1,15 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["Flutter CI"]
-    types:
-      - completed
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main' &&
-      startsWith(github.event.workflow_run.head_commit.message, 'release:')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-
-      - name: Extract version from commit message
-        id: version
-        run: |
-          MESSAGE="${{ github.event.workflow_run.head_commit.message }}"
-          RAW_VERSION=$(echo "$MESSAGE" | head -n1 | sed -E 's/^release:\s*v?([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-          echo "VERSION=$RAW_VERSION" >> "$GITHUB_ENV"
-          echo "version=$RAW_VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Sync pubspec.yaml version
-        run: |
-          COMMIT_VERSION="${{ env.VERSION }}"
-          COMMIT_VERSION="${COMMIT_VERSION#v}"
-          PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          if [ "$PKG_VERSION" != "$COMMIT_VERSION" ]; then
-            echo "Updating pubspec.yaml version from $PKG_VERSION to $COMMIT_VERSION"
-            sed -i "s/^version: .*/version: $COMMIT_VERSION/" pubspec.yaml
-          else
-            echo "Versions match: $PKG_VERSION"
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pubspec.yaml
-          git commit -m "chore: sync pubspec.yaml to v${VERSION} [skip ci]" || echo "No changes to commit"
-          git push origin HEAD:${{ github.event.workflow_run.head_branch }} || echo "Nothing to push"
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: '3.44.8'
-
-      - name: Setup pub credentials
-        run: |
-          mkdir -p $HOME/.config/dart
-          echo '${{ secrets.PUB_CREDENTIALS }}' > $HOME/.config/dart/pub-credentials.json
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Publish to pub.dev
-        run: flutter pub publish --force
-
-      - name: Verify pub.dev publish
-        run: |
-          PKG_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          for i in $(seq 1 30); do
-            LATEST=$(curl -fsSL https://pub.dev/api/packages/syzygy_ui_flutter | jq -r '.latest.version' 2>/dev/null || echo "")
-            if [ "$LATEST" = "$PKG_VERSION" ]; then
-              echo "✅ pub.dev shows syzygy_ui_flutter@$PKG_VERSION"
-              exit 0
-            fi
-            echo "Attempt $i/30: pub.dev shows '$LATEST', expected '$PKG_VERSION' — waiting 10s for propagation..."
-            sleep 10
-          done
-          echo "::error::Publish verification failed — pub.dev never reported syzygy_ui_flutter@$PKG_VERSION"
-          exit 1
-
-      - name: Delete existing tag if exists
-        run: git push origin :refs/tags/${{ env.VERSION }} || true
-
-      - name: Create GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${VERSION}" \
-            --title "${VERSION}" \
-            --notes "${{ github.event.workflow_run.head_commit.message }}" \
-            --target ${{ github.event.workflow_run.head_branch }}
-
-      - name: Summary
-        run: |
-          echo "✅ Published syzygy_ui_flutter@${{ env.VERSION }} to pub.dev"
-          echo "✅ GitHub Release ${{ env.VERSION }} created"
+    uses: Syzygy-Hub/.github/.github/workflows/flutter-release.yml@main
+    secrets: inherit
