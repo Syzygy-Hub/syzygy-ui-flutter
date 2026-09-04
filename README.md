@@ -7,11 +7,19 @@
 [![CI](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/flutter.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/flutter.yml)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/syzygy-brand-assets/main/Assets/syzygy-banner-dark-2400.png">
-  <img src="https://raw.githubusercontent.com/Syzygy-Hub/syzygy-brand-assets/main/Assets/syzygy-banner-light-2400.png" alt="Syzygy" width="500">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-dark-2400.png">
+  <img src="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-light-2400.png" alt="Syzygy" width="500">
 </picture>
 
+The cross-platform design system layer of the Syzygy ecosystem — providing SyzygyTheme, runtime theme switching, and UI components across iOS, Android, React Native and Flutter.
+
 Production-ready Flutter component library with design tokens, Dark Mode, and zero third-party dependencies.
+
+## Role in the Syzygy Ecosystem
+
+`syzygy-ui-flutter` is the design system layer. It depends only on `syzygy-foundation-flutter` and is independently usable without adopting Core, Services or AI.
+
+Full ecosystem architecture: [ecosystem-fragment.md](https://github.com/Syzygy-Hub/.github/blob/main/docs/ecosystem-fragment.md)
 
 ## Requirements
 - Flutter 3.35+
@@ -22,12 +30,82 @@ Production-ready Flutter component library with design tokens, Dark Mode, and ze
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  syzygy_ui_flutter: ^2.4.0
+  syzygy_ui_flutter: ^2.5.0
 ```
 
 Then run:
 ```sh
 flutter pub get
+```
+
+## Theming
+
+Syzygy UI 2.5.0 ships a runtime theming system built on `InheritedWidget`. The token files in `lib/src/tokens/` are unchanged; `SyzygyTheme` is the new injection layer.
+
+### Wrapping with SyzygyThemeProvider
+
+Place `SyzygyThemeProvider` inside `MaterialApp` as a child (not a parent), so `BuildContext` and `Scaffold` are available:
+
+```dart
+MaterialApp(
+  theme: AppTheme.light(),
+  darkTheme: AppTheme.dark(),
+  home: SyzygyThemeProvider(
+    theme: SyzygyTheme.defaultTheme,
+    builder: (context, setTheme) => MyHomePage(setTheme: setTheme),
+  ),
+)
+```
+
+### Accessing the theme
+
+In any widget that is a descendant of `SyzygyThemeProvider`, call:
+
+```dart
+final theme = SyzygyThemeProvider.of(context);
+
+// Use semantic tokens:
+theme.colors.primary
+theme.radius.md
+theme.spacing.lg
+theme.typography.headline
+theme.elevation.sm
+theme.animation.duration.normal
+```
+
+If no provider is in the tree, `SyzygyThemeProvider.of` returns `SyzygyTheme.defaultTheme` — no null checks needed.
+
+### Component-level theme override
+
+Every component accepts an optional `theme` constructor parameter. When supplied it takes precedence over the inherited theme, allowing per-widget overrides without touching the tree:
+
+```dart
+PrimaryButton(
+  label: 'High Contrast Action',
+  onPressed: () {},
+  theme: SyzygyTheme.highContrast,
+)
+```
+
+### Built-in themes
+
+| Constant | Description |
+|---|---|
+| `SyzygyTheme.defaultTheme` | Light palette, standard radius and typography |
+| `SyzygyTheme.dark` | Dark palette tuned for OLED screens |
+| `SyzygyTheme.highContrast` | High-contrast palette, sharp (zero) radius, heavier weights |
+
+### Runtime theme switching
+
+The `builder` callback provides a `setTheme` function you can store and call from anywhere:
+
+```dart
+SyzygyThemeProvider(
+  builder: (context, setTheme) => ElevatedButton(
+    onPressed: () => setTheme(SyzygyTheme.dark),
+    child: const Text('Switch to Dark'),
+  ),
+)
 ```
 
 ## Components
@@ -46,6 +124,8 @@ Several components are named to avoid colliding with Flutter Material's own widg
 - **Badges:** Badge *(hides Material's `Badge`)*
 - **Layout:** KeyboardAvoidingScrollView, PagerView *(swipeable paged content, not navigation chrome; `onPageChanged` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)*, AdaptiveStack, FlowLayout, StickyHeader, SafeAreaWrapper (themed wrapper around Flutter's own native `SafeArea`), LabeledDivider (wraps `DividerLine` with a centered/leading/trailing label)
 - **Transitions:** `NavigationTransitions.slideTransition`, `.crossFadeTransition`, `.slideVerticalTransition`, `.modalPresentationTransition`, `.scaleTransition`, `.fadeThroughTransition` — `PageRouteBuilder` factories
+
+**PagerView — placement note**: PagerView is a presentational paged-content component, not a navigation element. It is listed under **Layout** for that reason — wire its `onPageChanged` output into your own navigator if you want navigation semantics.
 
 **NetworkStatusBanner — cross-platform note**: On iOS and Android, `NetworkStatusBanner` self-detects connectivity via first-party OS APIs and requires no `isOffline` prop. On React Native and Flutter, real network detection requires a third-party package that this library deliberately does not bundle, so the banner is controlled/presentational — pass `isOffline` from your own network state.
 
@@ -194,76 +274,6 @@ See the [Components](#components) list above for everything else available.
 - Patch: `v1.0.1` — bug fixes
 - Minor: `v1.1.0` — new components
 - Major: `v2.0.0` — breaking changes
-
-## Theming
-
-Syzygy UI 2.4.0 ships a runtime theming system built on `InheritedWidget`. The token files in `lib/src/tokens/` are unchanged; `SyzygyTheme` is the new injection layer.
-
-### Wrapping with SyzygyThemeProvider
-
-Place `SyzygyThemeProvider` inside `MaterialApp` as a child (not a parent), so `BuildContext` and `Scaffold` are available:
-
-```dart
-MaterialApp(
-  theme: AppTheme.light(),
-  darkTheme: AppTheme.dark(),
-  home: SyzygyThemeProvider(
-    theme: SyzygyTheme.defaultTheme,
-    builder: (context, setTheme) => MyHomePage(setTheme: setTheme),
-  ),
-)
-```
-
-### Accessing the theme
-
-In any widget that is a descendant of `SyzygyThemeProvider`, call:
-
-```dart
-final theme = SyzygyThemeProvider.of(context);
-
-// Use semantic tokens:
-theme.colors.primary
-theme.radius.md
-theme.spacing.lg
-theme.typography.headline
-theme.elevation.sm
-theme.animation.duration.normal
-```
-
-If no provider is in the tree, `SyzygyThemeProvider.of` returns `SyzygyTheme.defaultTheme` — no null checks needed.
-
-### Component-level theme override
-
-Every component accepts an optional `theme` constructor parameter. When supplied it takes precedence over the inherited theme, allowing per-widget overrides without touching the tree:
-
-```dart
-PrimaryButton(
-  label: 'High Contrast Action',
-  onPressed: () {},
-  theme: SyzygyTheme.highContrast,
-)
-```
-
-### Built-in themes
-
-| Constant | Description |
-|---|---|
-| `SyzygyTheme.defaultTheme` | Light palette, standard radius and typography |
-| `SyzygyTheme.dark` | Dark palette tuned for OLED screens |
-| `SyzygyTheme.highContrast` | High-contrast palette, sharp (zero) radius, heavier weights |
-
-### Runtime theme switching
-
-The `builder` callback provides a `setTheme` function you can store and call from anywhere:
-
-```dart
-SyzygyThemeProvider(
-  builder: (context, setTheme) => ElevatedButton(
-    onPressed: () => setTheme(SyzygyTheme.dark),
-    child: const Text('Switch to Dark'),
-  ),
-)
-```
 
 ## License
 MIT

@@ -2,9 +2,13 @@ name: Flutter CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build-and-test:
@@ -17,13 +21,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.44.8'
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Fetch shared Dart analysis config
-        run: curl -fsSL https://raw.githubusercontent.com/Syzygy-Hub/syzygy-lint-config/v1.0.0/analysis_options.yaml -o analysis_options.yaml
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Syzygy-Hub/.github/main/engineering/tooling/flutter/analysis_options.yaml \
+            -o analysis_options.yaml
 
       - name: Analyze
         run: flutter analyze --fatal-warnings
