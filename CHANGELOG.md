@@ -15,13 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2026-10-06
+
+### Changed — BREAKING
+
+- **Foundation 3.0.0 minimum dependency added** (`syzygy_foundation_flutter >=3.0.0`)
+- **Radius.xl corrected** from 16 to 24
+
+---
+
 ## [2.5.0] - 2026-09-04
 
 ### Changed
 
 - CI workflow improvements: tags-ignore trigger, lint order fix, Node/runner updates
 - Release workflow: added required permissions block
-- RN: added publish-npm job for reliable npm OIDC publishing
 
 ---
 
@@ -125,7 +133,7 @@ No carry-over patch fixes were needed in this repo for this release — the Page
 - Updated installation to use pub.dev.
 - Improved release workflow with automatic pub.dev publishing.
 
-## [1.0.0]
+## [1.0.0] - 2026-07-27
 
 - Initial release.
 - Components: PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, IconButton, TextInput, SecureInput, LoadingView, EmptyStateView, ToastView, CardView, Badge, BackButton.
@@ -133,5 +141,14 @@ No carry-over patch fixes were needed in this repo for this release — the Page
 - Full Dark Mode support via ThemeExtension.
 - 18 tests passing.
 
+[Unreleased]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.5.0...3.0.0
 [2.5.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.3.0...2.4.0
+[2.3.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.2.1...2.3.0
+[2.2.1]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.2.0...2.2.1
+[2.2.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.1.0...2.2.0
+[2.1.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/2.0.0...2.1.0
+[2.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/1.0.1...2.0.0
+[1.0.1]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-flutter/releases/tag/1.0.0

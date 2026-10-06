@@ -1000,4 +1000,334 @@ void main() {
       expect(find.byType(DividerLine), findsNWidgets(2));
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Theme layer
+  // ---------------------------------------------------------------------------
+  group('SyzygyThemeProvider', () {
+    testWidgets('provides default theme values to descendants', (tester) async {
+      late SyzygyTheme resolved;
+      await tester.pumpWidget(MaterialApp(
+        home: SyzygyThemeProvider(
+          theme: SyzygyTheme.defaultTheme,
+          builder: (_, __) => Builder(builder: (context) {
+            resolved = SyzygyThemeProvider.of(context);
+            return const SizedBox();
+          }),
+        ),
+      ));
+      expect(resolved.colors.primary, const Color(0xFF2563EB));
+      expect(resolved.radius.md, 8.0);
+      expect(resolved.spacing.md, isNotNull);
+    });
+
+    testWidgets('provides dark theme values when dark theme is passed', (tester) async {
+      late SyzygyTheme resolved;
+      await tester.pumpWidget(MaterialApp(
+        home: SyzygyThemeProvider(
+          theme: SyzygyTheme.dark,
+          builder: (_, __) => Builder(builder: (context) {
+            resolved = SyzygyThemeProvider.of(context);
+            return const SizedBox();
+          }),
+        ),
+      ));
+      // Check dark-specific color token value rather than whole-object identity
+      expect(resolved.colors.background, const Color(0xFF000000));
+      expect(resolved.colors.primary, const Color(0xFF3D8BFF));
+    });
+
+    testWidgets('didUpdateWidget updates theme when parent rebuilds with new theme',
+        (tester) async {
+      SyzygyTheme current = SyzygyTheme.defaultTheme;
+      late SyzygyTheme resolved;
+
+      await tester.pumpWidget(MaterialApp(
+        home: StatefulBuilder(builder: (outerCtx, setState) {
+          return SyzygyThemeProvider(
+            theme: current,
+            builder: (_, __) => Builder(builder: (innerCtx) {
+              resolved = SyzygyThemeProvider.of(innerCtx);
+              return ElevatedButton(
+                onPressed: () => setState(() => current = SyzygyTheme.dark),
+                child: const Text('Switch'),
+              );
+            }),
+          );
+        }),
+      ));
+      // Default theme has light background
+      expect(resolved.colors.background, const Color(0xFFFFFFFF));
+
+      await tester.tap(find.text('Switch'));
+      await tester.pump();
+
+      // After switch, dark theme has black background
+      expect(resolved.colors.background, const Color(0xFF000000));
+    });
+
+    testWidgets('returns defaultTheme when no provider is in the tree', (tester) async {
+      late SyzygyTheme resolved;
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(builder: (context) {
+          resolved = SyzygyThemeProvider.of(context);
+          return const SizedBox();
+        }),
+      ));
+      // When no provider is in tree, defaultTheme light colors are returned
+      expect(resolved.colors.primary, const Color(0xFF2563EB));
+      expect(resolved.colors.background, const Color(0xFFFFFFFF));
+    });
+
+    test('SyzygyTheme == works correctly — same values are equal', () {
+      const a = SyzygyTheme.defaultTheme;
+      const b = SyzygyTheme.defaultTheme;
+      expect(a == b, isTrue);
+      expect(a.hashCode, b.hashCode);
+    });
+
+    test('SyzygyTheme == returns false for different themes', () {
+      const a = SyzygyTheme.defaultTheme;
+      const b = SyzygyTheme.dark;
+      expect(a == b, isFalse);
+    });
+
+    test('SyzygyTheme copyWith returns new instance with changed field', () {
+      const original = SyzygyTheme.defaultTheme;
+      final copy = original.copyWith(radius: SyzygyRadius.sharp);
+      expect(copy.radius, SyzygyRadius.sharp);
+      expect(copy.colors, original.colors);
+      expect(copy == original, isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Debounce
+  // ---------------------------------------------------------------------------
+  group('SearchInput debounce', () {
+    testWidgets('onSearchTextChanged fires after debounce delay', (tester) async {
+      final calls = <String>[];
+      await tester.pumpWidget(_wrap(
+        SearchInput(
+          debounce: const Duration(milliseconds: 200),
+          onSearchTextChanged: calls.add,
+        ),
+      ));
+
+      await tester.enterText(find.byType(TextField), 'hello');
+      await tester.pump(); // immediate — not yet
+      expect(calls, isEmpty);
+
+      await tester.pump(const Duration(milliseconds: 300)); // past debounce
+      expect(calls, ['hello']);
+    });
+
+    testWidgets('onSearchTextChanged does not fire before debounce delay', (tester) async {
+      final calls = <String>[];
+      await tester.pumpWidget(_wrap(
+        SearchInput(
+          debounce: const Duration(milliseconds: 500),
+          onSearchTextChanged: calls.add,
+        ),
+      ));
+
+      await tester.enterText(find.byType(TextField), 'abc');
+      await tester.pump(const Duration(milliseconds: 100)); // too early
+      expect(calls, isEmpty);
+
+      await tester.pump(const Duration(milliseconds: 500)); // now past
+      expect(calls, ['abc']);
+    });
+
+    testWidgets('onChanged fires immediately (no debounce)', (tester) async {
+      final calls = <String>[];
+      await tester.pumpWidget(_wrap(
+        SearchInput(onChanged: calls.add),
+      ));
+
+      await tester.enterText(find.byType(TextField), 'x');
+      await tester.pump();
+      expect(calls, isNotEmpty);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // OTP input
+  // ---------------------------------------------------------------------------
+  group('OTPInput', () {
+    testWidgets('accepts digit input', (tester) async {
+      String code = '';
+      await tester.pumpWidget(_wrap(
+        OTPInput(length: 4, code: code, onCodeChange: (v) => code = v),
+      ));
+      final fields = find.byType(TextField);
+      await tester.enterText(fields.at(0), '5');
+      await tester.pump();
+      expect(code.contains('5'), isTrue);
+    });
+
+    testWidgets('rejects non-digit input via FilteringTextInputFormatter', (tester) async {
+      String code = '';
+      await tester.pumpWidget(_wrap(
+        OTPInput(length: 4, code: code, onCodeChange: (v) => code = v),
+      ));
+      // Try to type a letter — formatter should strip it
+      await tester.enterText(find.byType(TextField).at(0), 'a');
+      await tester.pump();
+      final controller = tester.widget<TextField>(find.byType(TextField).at(0)).controller!;
+      expect(controller.text, isEmpty);
+    });
+
+    testWidgets('fills cells in order — first cell gets digit 3', (tester) async {
+      String code = '';
+      await tester.pumpWidget(_wrap(
+        OTPInput(length: 4, code: code, onCodeChange: (v) => code = v),
+      ));
+      final fields = find.byType(TextField);
+      await tester.tap(fields.at(0));
+      await tester.enterText(fields.at(0), '3');
+      await tester.pump();
+      // First cell contains '3'
+      final c0 = tester.widget<TextField>(fields.at(0)).controller!;
+      expect(c0.text, '3');
+    });
+
+    testWidgets('reports combined code via onCodeChange', (tester) async {
+      String code = '';
+      await tester.pumpWidget(_wrap(
+        OTPInput(length: 4, code: code, onCodeChange: (v) => code = v),
+      ));
+      await tester.enterText(find.byType(TextField).at(0), '7');
+      await tester.pump();
+      expect(code.isNotEmpty, isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // QuantityStepper
+  // ---------------------------------------------------------------------------
+  group('QuantityStepper', () {
+    testWidgets('increment increases value', (tester) async {
+      var value = 3;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return QuantityStepper(
+            value: value,
+            onChanged: (v) => setState(() => value = v),
+          );
+        }),
+      ));
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(value, 4);
+    });
+
+    testWidgets('decrement decreases value', (tester) async {
+      var value = 5;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return QuantityStepper(
+            value: value,
+            onChanged: (v) => setState(() => value = v),
+          );
+        }),
+      ));
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+      expect(value, 4);
+    });
+
+    testWidgets('decrement is disabled at min', (tester) async {
+      var value = 0;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return QuantityStepper(
+            value: value,
+            min: 0,
+            onChanged: (v) => setState(() => value = v),
+          );
+        }),
+      ));
+      // The decrease button should be disabled — tapping does nothing
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+      expect(value, 0);
+    });
+
+    testWidgets('increment is disabled at max', (tester) async {
+      var value = 10;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return QuantityStepper(
+            value: value,
+            max: 10,
+            onChanged: (v) => setState(() => value = v),
+          );
+        }),
+      ));
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(value, 10);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // onChange callbacks
+  // ---------------------------------------------------------------------------
+  group('onChange callbacks', () {
+    testWidgets('ToggleSwitch calls onChanged with correct value', (tester) async {
+      bool? reported;
+      bool value = false;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return ToggleSwitch(
+            label: 'Dark mode',
+            value: value,
+            onChanged: (v) {
+              reported = v;
+              setState(() => value = v);
+            },
+          );
+        }),
+      ));
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+      expect(reported, isTrue);
+    });
+
+    testWidgets('SliderInput calls onChanged with updated value', (tester) async {
+      double? reported;
+      await tester.pumpWidget(_wrap(
+        SliderInput(
+          label: 'Brightness',
+          value: 0.0,
+          onChanged: (v) => reported = v,
+        ),
+      ));
+      await tester.drag(find.byType(Slider), const Offset(100, 0));
+      await tester.pump();
+      expect(reported, isNotNull);
+      expect(reported, greaterThan(0.0));
+    });
+
+    testWidgets('SegmentedControl calls onChanged with selected option', (tester) async {
+      String? reported;
+      await tester.pumpWidget(_wrap(
+        StatefulBuilder(builder: (context, setState) {
+          return SegmentedControl<String>(
+            options: const ['A', 'B', 'C'],
+            selection: 'A',
+            onChanged: (v) {
+              reported = v;
+              setState(() {});
+            },
+            optionTitle: (o) => o,
+          );
+        }),
+      ));
+      await tester.tap(find.text('B'));
+      await tester.pump();
+      expect(reported, 'B');
+    });
+  });
 }

@@ -1,5 +1,5 @@
 # Mirrors the shared config CI fetches from syzygy-lint-config
-# (https://github.com/Syzygy-Hub/syzygy-lint-config, pinned to v1.0.0), so
+# (https://github.com/Syzygy-Hub/syzygy-lint-config), so
 # `flutter analyze` behaves identically whether run locally or in CI.
 # Previously this file only included flutter_lints' bare defaults, so a
 # clean local `flutter analyze` could still surface new findings once CI

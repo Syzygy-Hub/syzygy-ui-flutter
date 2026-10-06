@@ -40,6 +40,16 @@ class _SyzygyThemeProviderState extends State<SyzygyThemeProvider> {
     _theme = widget.theme;
   }
 
+  @override
+  void didUpdateWidget(SyzygyThemeProvider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.theme != oldWidget.theme) {
+      setState(() {
+        _theme = widget.theme;
+      });
+    }
+  }
+
   void _setTheme(SyzygyTheme theme) => setState(() => _theme = theme);
 
   @override

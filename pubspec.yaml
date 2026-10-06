@@ -1,6 +1,6 @@
 name: syzygy_ui_flutter
 description: "Production-ready Flutter component library with design tokens, Dark Mode, and zero third-party dependencies"
-version: 2.5.0
+version: 3.0.0
 homepage: https://github.com/Syzygy-Hub/syzygy-ui-flutter
 
 environment:
@@ -16,6 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  syzygy_foundation_flutter: ^3.0.0
 
 dev_dependencies:
   flutter_test:
