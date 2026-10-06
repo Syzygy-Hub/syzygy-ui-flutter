@@ -116,3 +116,6 @@ export 'src/components/layout/labeled_divider.dart';
 
 // Transitions
 export 'src/transitions/navigation_transitions.dart';
+
+// Version
+export 'src/version.dart';

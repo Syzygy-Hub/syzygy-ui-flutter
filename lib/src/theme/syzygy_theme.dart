@@ -23,6 +23,21 @@ class SyzygyTheme {
   final SyzygyElevation elevation;
   final SyzygyAnimation animation;
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SyzygyTheme &&
+          runtimeType == other.runtimeType &&
+          colors == other.colors &&
+          radius == other.radius &&
+          typography == other.typography &&
+          spacing == other.spacing &&
+          elevation == other.elevation &&
+          animation == other.animation;
+
+  @override
+  int get hashCode => Object.hash(colors, radius, typography, spacing, elevation, animation);
+
   SyzygyTheme copyWith({
     SyzygyColors? colors,
     SyzygyRadius? radius,

@@ -1,17 +1,17 @@
 # syzygy_ui_flutter
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![pub.dev](https://img.shields.io/pub/v/syzygy_ui_flutter)](https://pub.dev/packages/syzygy_ui_flutter)
+[![Version](https://img.shields.io/badge/version-3.0.0-D85A30?style=flat)](https://github.com/Syzygy-Hub/syzygy-ui-flutter/releases)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Web-lightgrey)](https://flutter.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/flutter.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/flutter.yml)
+[![CI](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/ci.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-flutter/actions/workflows/ci.yml)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-dark-2400.png">
   <img src="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-light-2400.png" alt="Syzygy" width="500">
 </picture>
 
-The cross-platform design system layer of the Syzygy ecosystem — providing SyzygyTheme, runtime theme switching, and UI components across iOS, Android, React Native and Flutter.
+The Flutter design system layer of the Syzygy ecosystem — providing SyzygyTheme, runtime theme switching, and UI components for Flutter (iOS and Android).
 
 Production-ready Flutter component library with design tokens, Dark Mode, and zero third-party dependencies.
 
@@ -24,13 +24,14 @@ Full ecosystem architecture: [ecosystem-fragment.md](https://github.com/Syzygy-H
 ## Requirements
 - Flutter 3.35+
 - Dart 3.9+
+- syzygy_foundation_flutter >= 3.0.0
 
 ## Installation
 
 Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  syzygy_ui_flutter: ^2.5.0
+  syzygy_ui_flutter: ^3.0.0
 ```
 
 Then run:
@@ -40,7 +41,7 @@ flutter pub get
 
 ## Theming
 
-Syzygy UI 2.5.0 ships a runtime theming system built on `InheritedWidget`. The token files in `lib/src/tokens/` are unchanged; `SyzygyTheme` is the new injection layer.
+Syzygy UI ships a runtime theming system built on `InheritedWidget`. The token files in `lib/src/tokens/` are unchanged; `SyzygyTheme` is the new injection layer.
 
 ### Wrapping with SyzygyThemeProvider
 
@@ -127,9 +128,14 @@ Several components are named to avoid colliding with Flutter Material's own widg
 
 **PagerView — placement note**: PagerView is a presentational paged-content component, not a navigation element. It is listed under **Layout** for that reason — wire its `onPageChanged` output into your own navigator if you want navigation semantics.
 
-**NetworkStatusBanner — cross-platform note**: On iOS and Android, `NetworkStatusBanner` self-detects connectivity via first-party OS APIs and requires no `isOffline` prop. On React Native and Flutter, real network detection requires a third-party package that this library deliberately does not bundle, so the banner is controlled/presentational — pass `isOffline` from your own network state.
+**NetworkStatusBanner — Flutter note**: Flutter has no built-in connectivity API, so real network detection requires a third-party package that this library deliberately does not bundle. The banner is controlled/presentational — pass `isOffline` from your own network state.
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+## Upgrading to 3.0.0
+
+- **Foundation 3.0.0 is now required** — add `syzygy_foundation_flutter: ^3.0.0` to your `pubspec.yaml` dependencies.
+- **Radius.xl corrected to 24** (was 16) — if you have hardcoded the value `16` for `xl` corner radius, update to `24`.
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list of changes.
 
 ## Design Tokens
 
@@ -189,8 +195,8 @@ Text('Hello', style: AppTypography.titleMedium(context))
 | `sm` | 4.0 |
 | `md` | 8.0 |
 | `lg` | 16.0 |
-| `xl` | 16.0 (shares `lg`'s value under a distinct semantic name) |
-| `full` | 999.0 (pill/capsule shapes) |
+| `xl` | 24.0 |
+| `full` | 9999.0 (pill/capsule shapes) |
 
 ### Elevation (`AppElevation`)
 
@@ -265,15 +271,15 @@ See the [Components](#components) list above for everything else available.
 ```
 2. Commit with release prefix:
 ```sh
-   git commit -m "release: v1.2.0 — description"
+   git commit -m "release: 1.2.0 — description"
    git push origin main
 ```
 3. CI automatically runs tests, syncs pubspec.yaml version, and creates GitHub release.
 
 ### Version format
-- Patch: `v1.0.1` — bug fixes
-- Minor: `v1.1.0` — new components
-- Major: `v2.0.0` — breaking changes
+- Patch: `1.0.1` — bug fixes
+- Minor: `1.1.0` — new components
+- Major: `2.0.0` — breaking changes
 
 ## License
 MIT

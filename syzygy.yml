@@ -7,4 +7,5 @@ platform: flutter
 language: dart
 package_manager: pub.dev
 license: MIT
-version: 2.5.0
+version: 3.0.0
+syzygy_foundation: ">=3.0.0"
